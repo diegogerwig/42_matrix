@@ -156,7 +156,7 @@ La interpolación lineal (abreviada históricamente en software como `lerp`) es 
 
 Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
 
-![](./doc/LinearInterpolation.svg)
+![](./doc/LinearInterpolation.png)
 
 ### 🧠 Lógica
 La interpolación lineal funciona como un **promedio ponderado** o una balanza entre dos valores. A medida que el porcentaje $t$ avanza de $0.0$ a $1.0$, el peso o la influencia del punto inicial ($u$) disminuye, mientras que la del punto final ($v$) aumenta de forma inversamente proporcional.
@@ -205,6 +205,8 @@ El producto escalar (o *dot product*, representado a menudo como $u \cdot v$ o $
 
 Geométricamente, el producto escalar es una medida de correlación direccional: nos indica qué tan alineados están dos vectores. Si el resultado es `0`, significa que los vectores son perfectamente perpendiculares entre sí. Es la pieza clave para calcular proyecciones ortogonales y resolver multiplicaciones matriciales.
 
+![](./doc/DotProduct.png)
+
 ### 🧠 Lógica y Optimización
 Para calcularlo, se multiplican las componentes homólogas de ambos vectores (X con X, Y con Y, etc.) y se suman todos esos productos parciales en un único acumulador escalar.
 
@@ -216,6 +218,7 @@ La complejidad algorítmica lograda es:
 
 ### 📊 Ejemplo de Flujo de Datos
 
+**Vectores Colineales**
 ```text
 Vectores: u = [4.0, 2.0]
           v = [2.0, 1.0]
@@ -225,4 +228,14 @@ Desarrollo FMA: (4.0 * 2.0) + (2.0 * 1.0)
 Acumulador: 8.0 + 2.0
 
 Resultado Escalar: 10.0
+```
+
+**Vectores NO Colineales**
+```text
+Vectores: u = [2.0, 1.0]
+          v = [-1.0, 3.0]
+-------------------------------------------------
+dot(u, v) = (2.0 * -1.0) + (1.0 * 3.0)
+             = -2.0 + 3.0
+Resultado Escalar = 1.0
 ```
