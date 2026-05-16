@@ -85,7 +85,7 @@ La operación se realiza elemento a elemento en la misma posición de la cuadrí
 2. **El Escalado Homogéneo (`scl`)**:
 La operación multiplica cada componente del contenedor por un factor numérico escalar común $\alpha$. Al tratarse de una transformación lineal pura, altera la magnitud del objeto conservando intacta su geometría y proporciones dimensionales originales.
 
-### 📊 Ejemplo de Flujo de Datos (In-place)
+### 📊 Ejemplos
 
 En cada llamada, la instancia que ejecuta el método absorbe los cambios directamente en sus arreglos internos.
 
@@ -129,7 +129,7 @@ A nivel de arquitectura de CPU, la operación matemática `(A * B) + C` ocurre c
 
 El uso de FMA no solo duplica teóricamente el rendimiento al reducir los pasos, sino que evita errores de redondeo de punto flotante al realizar la suma con precisión infinita internamente antes de truncar el resultado. Este proyecto detecta y utiliza nativamente `math.fma` aprovechando las bondades integradas en Python 3.13.
 
-### 📊 Ejemplo de Flujo de Datos
+### 📊 Ejemplo
 
 ```text
 Vectores de entrada: V1 = [1.0, 2.0, 3.0]
@@ -179,7 +179,7 @@ Aunque matemáticamente ambas expresiones son idénticas (significan "empieza en
 
 Para estructuras complejas como Vectores y Matrices, la función aplica la misma fórmula iterando de forma paralela (componente a componente).
 
-### 📊 Ejemplos de Flujo de Datos
+### 📊 Ejemplos
 
 **Interpolar Escalares:**
 ```text
@@ -223,7 +223,7 @@ La complejidad algorítmica lograda es:
 * **Tiempo: $O(n)$** ya que se recorren los $n$ elementos homólogos en un único bucle.
 * **Espacio: $O(1)$** dado que el resultado es simplemente un número primitivo (`float`), evitando instanciar nuevas estructuras iterables en memoria.
 
-### 📊 Ejemplo de Flujo de Datos
+### 📊 Ejemplo
 
 **Vectores Colineales**
 ```text
@@ -275,17 +275,17 @@ Dependiendo de las reglas geométricas del espacio en el que estemos trabajando,
 3. **Norma L-Infinito (Suprema):** Representa el componente absoluto de mayor tamaño. Se puede entender como "cuántos anillos concéntricos cuadrados" debes atravesar para llegar al punto.
 
 <p align="center">
-  <img src="./doc/Manhattan-Euclidean_Distance_1.png" width="50%" alt="Manhattan vs Euclidean Distance">
+  <img src="./doc/Manhattan-Euclidean_Distance_1.png" width="40%" alt="Manhattan vs Euclidean Distance">
 </p>
 
 <p align="center">
-  <img src="./doc/Manhattan-Euclidean_Distance_2.jpg" width="70%" alt="Manhattan vs Euclidean Distance">
+  <img src="./doc/Manhattan-Euclidean_Distance_2.jpg" width="80%" alt="Manhattan vs Euclidean Distance">
 </p>
 
 ### 🧠 Lógica
 El algoritmo sigue estrictamente las especificaciones de librerías permitidas. En lugar de utilizar `math.sqrt` (que no está en la lista de permitidas), la norma Euclidiana (L2) se calcula utilizando `pow(res, 0.5)` sobre el acumulador FMA de cuadrados, y el valor absoluto se procesa lógicamente con operadores de signo base sin requerir `abs()`, logrando en las 3 funciones una complejidad garantizada de $O(n)$ en tiempo y $O(1)$ en espacio extra.
 
-### 📊 Ejemplo de Flujo de Datos
+### 📊 Ejemplo
 
 ```text
 Vector: u = [-4.0, -2.0]
@@ -294,3 +294,42 @@ Norma 1 (Manhattan): |-4.0| + |-2.0| = 6.0
 Norma 2 (Euclidiana): sqrt((-4.0)² + (-2.0)²) = 4.472135955
 Norma Suprema (Inf): max(|-4.0|, |-2.0|) = 4.0
 ```
+
+---
+---
+
+## EX05 - Cosine
+
+### 💡 Descripción
+El coseno del ángulo que forman dos vectores es la medida definitiva de "similitud direccional" (*Cosine Similarity* en Machine Learning). A diferencia del producto escalar bruto (que puede escalar infinitamente dependiendo de las magnitudes de los vectores), el coseno normaliza el resultado forzándolo a estar en un rango estricto entre `[-1.0, 1.0]`.
+
+* **`1.0`**: Los vectores apuntan exactamente en la misma dirección (ángulo 0°).
+* **`0.0`**: Los vectores son perfectamente ortogonales (ángulo 90°).
+* **`-1.0`**: Los vectores apuntan en direcciones exactamente opuestas (ángulo 180°).
+
+### 🧠 Lógica
+Para calcular este factor, dividimos el producto escalar de los dos vectores por la multiplicación de sus respectivas Normas Euclidianas (L2).
+
+$$cos(\theta) = \frac{u \cdot v}{||u||_2 \times ||v||_2}$$
+
+Al depender algorítmicamente del producto escalar y la norma, la complejidad se mantiene lineal de cara a las dimensiones del vector:
+* **Complejidad Temporal:** $O(n)$
+* **Complejidad Espacial:** $O(1)$
+
+### 📊 Ejemplo
+
+```text
+Vectores: u = [8.0, 7.0]
+          v = [3.0, 2.0]
+-------------------------------------------------
+1. Producto Escalar (u·v): 24.0 + 14.0 = 38.0
+2. Norma de u (||u||): sqrt(64.0 + 49.0) ≈ 10.6301458
+3. Norma de v (||v||): sqrt(9.0 + 4.0) ≈ 3.6055512
+
+Cálculo Final: 38.0 / (10.6301458 * 3.6055512)
+Resultado: 0.991454296 (Vectores muy alineados, casi 1.0)
+```
+
+---
+---
+
