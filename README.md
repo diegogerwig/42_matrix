@@ -122,7 +122,7 @@ En este ejercicio se debe construir una función pura (que no modifica el estado
 </p>
 
 
-### 🧠 Lógica y Optimización (FMA)
+### 🧠 Lógica & Optimización (FMA)
 La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo y espacio.
 
 A nivel de arquitectura de CPU, la operación matemática `(A * B) + C` ocurre con tanta frecuencia en cálculo matricial y gráficos que los procesadores modernos tienen una instrucción ensambladora dedicada para ejecutar ambas acciones en un único flop (ciclo de reloj). Esto se conoce como **Fused Multiply-Accumulate (FMA)**. 
@@ -214,7 +214,7 @@ Geométricamente, el producto escalar es una medida de correlación direccional:
   <img src="./doc/Dot_Product.png" width="70%" alt="Dot Product">
 </p>
 
-### 🧠 Lógica y Optimización
+### 🧠 Lógica
 Para calcularlo, se multiplican las componentes homólogas de ambos vectores (X con X, Y con Y, etc.) y se suman todos esos productos parciales en un único acumulador escalar.
 
 Al igual que en combinaciones lineales, aprovechamos la instrucción nativa Fused Multiply-Add (`math.fma`) para realizar la operación de multiplicar y acumular cada componente de forma atómica a nivel de procesador, garantizando máxima velocidad y esquivando el truncamiento del error de punto flotante.
@@ -337,3 +337,37 @@ Resultado: 0.991454296 (Vectores muy alineados, casi 1.0)
 ---
 ---
 
+## EX06 - Cross Product
+
+### 💡 Descripción
+El producto vectorial (o *cross product*) es una operación exclusiva de espacios tridimensionales que toma dos vectores y genera un **tercer vector completamente nuevo**. 
+
+La característica fundamental de este nuevo vector es que es **ortogonal (perpendicular)** al plano que forman los dos primeros. Esto se utiliza masivamente en motores de físicas y renderizado gráfico para calcular las "normales" de las superficies de los polígonos (necesarias para aplicar texturas, colisiones y rebotes de luz).
+
+La dirección del vector resultante se rige por la **Regla de la Mano Derecha**: si alineas tus dedos índice y corazón con los vectores $u$ y $v$, tu pulgar apuntará en la dirección del vector resultante.
+
+<p align="center">
+  <img src="./doc/Croos_Product.jpeg" width="80%" alt="Cosine Similarity">
+</p>
+
+### 🧠 Lógica
+El cálculo se realiza mediante el determinante formal de los vectores unitarios estándar ($i, j, k$):
+
+$c_x = (u_y \times v_z) - (u_z \times v_y)$
+$c_y = (u_z \times v_x) - (u_x \times v_z)$
+$c_z = (u_x \times v_y) - (u_y \times v_x)$
+
+Debido a su naturaleza geométrica, si intentas cruzar un vector consigo mismo (o con un vector colineal a él), el resultado será siempre el vector nulo `[0, 0, 0]`, ya que no pueden formar un plano bidimensional del cual escapar.
+
+### 📊 Ejemplo
+
+```text
+Vectores: Eje X = [1.0, 0.0, 0.0]
+          Eje Y = [0.0, 1.0, 0.0]
+-------------------------------------------------
+c_x = (0.0 * 0.0) - (0.0 * 1.0) =  0.0
+c_y = (0.0 * 0.0) - (1.0 * 0.0) =  0.0
+c_z = (1.0 * 1.0) - (0.0 * 0.0) =  1.0
+
+Resultado: [0.0, 0.0, 1.0] (El Eje Z exacto)
+```

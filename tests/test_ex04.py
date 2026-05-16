@@ -22,6 +22,7 @@ def run():
         (([2., 1.],), 3.0),
         (([4., 2.],), 6.0),
         (([-4., -2.],), 6.0),
+        # CASOS DE ERROR CONTROLADO
     ]
 
     norm_cases_2 = [
@@ -32,6 +33,7 @@ def run():
         (([2., 1.],), 2.236067977),
         (([4., 2.],), 4.472135955),
         (([-4., -2.],), 4.472135955),
+        # CASOS DE ERROR CONTROLADO
     ]
 
     norm_cases_inf = [
@@ -42,6 +44,7 @@ def run():
         (([2., 1.],), 2.0),
         (([4., 2.],), 4.0),
         (([-4., -2.],), 4.0),
+        # CASOS DE ERROR CONTROLADO
     ]
 
     print(f"\n{CYAN}--- Pruebas de Norma 1 (Manhattan) ---{NC}")

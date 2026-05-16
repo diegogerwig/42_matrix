@@ -20,7 +20,7 @@ def run():
         #
         (([[-42., 42.], [1., 3.], [10., 20.]], [1., -10., -1.]), [-62., -8.]),
         (([[-42., 100., -69.5], [1., 3., 5.]], [1., -10.]), [-52., 70., -119.5]),
-        # Casos de error 
+        # CASOS DE ERROR CONTROLADO 
         (([[1., 2.], [3., 4., 5.]], [1., 2.]), None),  # Dimensiones diferentes
         (([[1., 2.]], [1., 2.]), None),                # Desajuste coeficientes/vectores
         (([], []), None),                              # Vacío

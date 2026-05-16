@@ -21,7 +21,7 @@ def run():
         (([4., 2.], [2., 1.]), 10.0),
         (([-4., -5.], [3. , 2.]), -22.0),
         (([-4., -5.], [-3. , -2.]), 22.0),
-        # Casos de error
+        # CASOS DE ERROR CONTROLADO
         (([1., 2.], [1., 2., 3.]), None),  # Dimensiones diferentes
         (([], []), None),                  # Vectores vacíos
         (([4., 2.], ['a', 1.]), None),     # Valores no numéricos

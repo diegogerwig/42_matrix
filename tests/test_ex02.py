@@ -39,7 +39,7 @@ def run():
         (([2., 1.], [4., 2.], 0.3), [2.6, 1.3]),
         # CASOS MATRICES
         (([[2., 1.], [3., 4.]], [[20., 10.], [30., 40.]], 0.5), [[11., 5.5], [16.5, 22.]]),
-        # Casos de error
+        # CASOS DE ERROR CONTROLADO
         (([1., 2.], [1., 2., 3.], 0.5), None),           # Vectores distinto tamaño
         (([[1., 2.]], [[1., 2.], [3., 4.]], 0.5), None), # Matrices distinto tamaño
         ((5., [1., 2.], 0.5), None),                     # Tipos incompatibles
