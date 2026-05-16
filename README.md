@@ -275,11 +275,11 @@ Dependiendo de las reglas geométricas del espacio en el que estemos trabajando,
 3. **Norma L-Infinito (Suprema):** Representa el componente absoluto de mayor tamaño. Se puede entender como "cuántos anillos concéntricos cuadrados" debes atravesar para llegar al punto.
 
 <p align="center">
-  <img src="./doc/Manhattan-Euclidean_Distance_1.png" width="70%" alt="Manhattan vs Euclidean Distance">
+  <img src="./doc/Manhattan-Euclidean_Distance_1.png" width="50%" alt="Manhattan vs Euclidean Distance">
 </p>
 
 <p align="center">
-  <img src="./doc/Manhattan-Euclidean_Distance_2.png" width="70%" alt="Manhattan vs Euclidean Distance">
+  <img src="./doc/Manhattan-Euclidean_Distance_2.jpg" width="70%" alt="Manhattan vs Euclidean Distance">
 </p>
 
 ### 🧠 Lógica
