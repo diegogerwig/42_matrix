@@ -110,3 +110,32 @@ Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]]
 ---
 ---
 
+## EX01 - Linear Combination
+
+### 💡 Descripción
+Una combinación lineal es la expresión matemática construida al multiplicar un conjunto de vectores por escalares y sumar los resultados. Este concepto es el núcleo absoluto del álgebra lineal y la base sobre la que se construyen las multiplicaciones de matrices y las transformaciones geométricas espaciales.
+
+En este ejercicio se debe construir una función pura (que no modifica el estado original, sino que devuelve un nuevo `Vector`) para calcular la combinación lineal de un arreglo de vectores con sus respectivos coeficientes.
+
+### 🧠 Lógica y Optimización (FMA)
+[cite_start]La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo [cite: 2532] [cite_start]y espacio[cite: 2533].
+
+A nivel de arquitectura de CPU, la operación matemática `(A * B) + C` ocurre con tanta frecuencia en cálculo matricial y gráficos que los procesadores modernos tienen una instrucción ensambladora dedicada para ejecutar ambas acciones en un único ciclo de reloj. Esto se conoce como **Fused Multiply-Accumulate (FMA)**. 
+
+El uso de FMA no solo duplica teóricamente el rendimiento al reducir los pasos, sino que evita errores de redondeo de punto flotante al realizar la suma con precisión infinita internamente antes de truncar el resultado. Este proyecto detecta y utiliza nativamente `math.fma` aprovechando las bondades integradas en Python 3.13.
+
+### 📊 Ejemplo de Flujo de Datos
+
+```text
+Vectores de entrada: V1 = [1.0, 2.0, 3.0]
+                     V2 = [0.0, 10.0, -100.0]
+
+Coeficientes:        C1 = 10.0
+                     C2 = -2.0
+-------------------------------------------------
+Cálculo interno:     (10 * V1) + (-2 * V2)
+Estado Final:        [10.0, 0.0, 230.0]
+```
+
+---
+---
