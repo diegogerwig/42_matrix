@@ -11,21 +11,16 @@ def run():
     print_header(3, "DOT PRODUCT")
 
     cases = [
-        # ==========================================
-        # CASOS DE LA HOJA DE EVALUACIÓN
-        # ==========================================
         (([0., 0.], [0., 0.]), 0.0),
         (([1., 0.], [0., 0.]), 0.0),
         (([1., 0.], [1., 0.]), 1.0),
-        (([1., 0.], [0., 1.]), 0.0),   # Vectores perpendiculares = producto escalar 0
+        (([1., 0.], [0., 1.]), 0.0),       # Vectores perpendiculares = producto escalar 0
         (([1., 1.], [1., 1.]), 2.0),
         (([4., 2.], [2., 1.]), 10.0),
-        
-        # ==========================================
-        # CASOS DE ERROR CONTROLADO
-        # ==========================================
+        # Casos de error
         (([1., 2.], [1., 2., 3.]), None),  # Dimensiones diferentes
         (([], []), None),                  # Vectores vacíos
+        (([4., 2.], ['a', 1.]), None),     # Valores no numéricos
     ]
 
     def custom_desc(u, v):

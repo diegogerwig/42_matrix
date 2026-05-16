@@ -158,6 +158,10 @@ Esta operación es intensamente utilizada en renderizado 3D para transicionar co
 
 ![](./doc/LinearInterpolation.png)
 
+<p align="center">
+  <img src="./doc/LinearInterpolation.png" width="70%" alt="Linear Interpolation">
+</p>
+
 ### 🧠 Lógica
 La interpolación lineal funciona como un **promedio ponderado** o una balanza entre dos valores. A medida que el porcentaje $t$ avanza de $0.0$ a $1.0$, el peso o la influencia del punto inicial ($u$) disminuye, mientras que la del punto final ($v$) aumenta de forma inversamente proporcional.
 
@@ -223,21 +227,23 @@ La complejidad algorítmica lograda es:
 Vectores: u = [4.0, 2.0]
           v = [2.0, 1.0]
 -------------------------------------------------
-Cálculo: (u_x * v_x) + (u_y * v_y)
-Desarrollo FMA: (4.0 * 2.0) + (2.0 * 1.0)
-Acumulador: 8.0 + 2.0
+Fórmula: (u_x * v_x) + (u_y * v_y)
+Operaciones: (4.0 * 2.0) + (2.0 * 1.0)
+Parciales: 8.0 + 2.0
 
-Resultado Escalar: 10.0
+Resultado: 10.0
 ```
 
-**Vectores NO Colineales**
+**Vectores NO Colineales (Linealmente Independientes)**
 ```text
 Vectores: u = [2.0, 1.0]
           v = [-1.0, 3.0]
 -------------------------------------------------
-dot(u, v) = (2.0 * -1.0) + (1.0 * 3.0)
-             = -2.0 + 3.0
-Resultado Escalar = 1.0
+Fórmula: (u_x * v_x) + (u_y * v_y)
+Operaciones: (2.0 * -1.0) + (1.0 * 3.0)
+Parciales: -2.0 + 3.0
+
+Resultado: 1.0
 ```
 
 **Vectores Ortogonales (Perpendiculares)**
@@ -245,8 +251,12 @@ Resultado Escalar = 1.0
 Vectores: u = [2.0, 3.0]
           v = [-3.0, 2.0]
 -------------------------------------------------
-Cálculo: (u_x * v_x) + (u_y * v_y)
-Desarrollo FMA: (2.0 * -3.0) + (3.0 * 2.0)
-Acumulador: -6.0 + 6.0
+Fórmula: (u_x * v_x) + (u_y * v_y)
+Operaciones: (2.0 * -3.0) + (3.0 * 2.0)
+Parciales: -6.0 + 6.0
 
-Resultado Escalar: 0.0  (Forman un ángulo de 90° exactos)
+Resultado: 0.0  (Forman un ángulo de 90° exactos)
+```
+
+---
+---
