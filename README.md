@@ -239,3 +239,14 @@ dot(u, v) = (2.0 * -1.0) + (1.0 * 3.0)
              = -2.0 + 3.0
 Resultado Escalar = 1.0
 ```
+
+**Vectores Ortogonales (Perpendiculares)**
+```text
+Vectores: u = [2.0, 3.0]
+          v = [-3.0, 2.0]
+-------------------------------------------------
+Cálculo: (u_x * v_x) + (u_y * v_y)
+Desarrollo FMA: (2.0 * -3.0) + (3.0 * 2.0)
+Acumulador: -6.0 + 6.0
+
+Resultado Escalar: 0.0  (Forman un ángulo de 90° exactos)
