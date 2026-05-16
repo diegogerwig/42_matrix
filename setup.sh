@@ -181,15 +181,19 @@ else
                 echo -e "${B_CYAN}│ ⌛ ESPERANDO CONFIRMACIÓN...                           │${NC}"
                 echo -e "${B_CYAN}╰────────────────────────────────────────────────────────╯${NC}"
                 echo -e "${B_YELLOW} ↳ Presiona [ENTER] para avanzar al siguiente test.${NC}"
-                echo -e "${B_YELLOW} ↳ O escribe un comando Python para probar a mano (ej: 'python3 src/main.py').${NC}\n"
+                echo -e "${B_YELLOW} ↳ Escribe '${B_GREEN}python3${B_YELLOW}' para abrir la consola interactiva y probar tus clases.${NC}"
+                echo -e "${B_YELLOW} ↳ O escribe un comando de terminal (ej: ls, cat).${NC}\n"
                 
                 echo -ne "${B_GREEN} > ${NC}"
                 read -r user_input
 
                 if [[ -z "$user_input" ]]; then
                     break
+                elif [[ "$user_input" == "python" || "$user_input" == "python3" ]]; then
+                    # Si escribes python, aseguramos que el PYTHONPATH esté bien inyectado
+                    PYTHONPATH="$(pwd)/src" python3
                 else
-                    eval $user_input
+                    eval "$user_input"
                 fi
             done
         done

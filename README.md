@@ -24,6 +24,26 @@ python3 tests/test_ex00.py
 
 ```
 
+### 3. Ejecución Manual del Código
+
+Si quieres verificar el comportamiento algebraico de las estructuras de forma interactiva, primero asegúrate de abrir Python con las rutas configuradas. Puedes hacerlo de dos formas:
+1. Ejecutando `bash setup.sh venv` para abrir una terminal con el entorno cargado y luego escribiendo `python3`.
+2. Escribiendo `python3` directamente en la pausa interactiva de los tests automatizados.
+
+Una vez dentro de la consola de Python (`>>>`), puedes operar tus clases de la siguiente manera:
+
+```python
+from vector import Vector
+from matrix import Matrix
+
+# Ejemplo de suma in-place con Vectores
+u = Vector([2.0, 3.0])
+v = Vector([5.0, 7.0])
+u.add(v)
+print(u)
+# [7.0]
+# [10.0]
+
 ---
 
 ## ⚡ Guía Rápida de Componentes y Restricciones
