@@ -18,11 +18,15 @@ def wrapper_linear_interpolation(u_data, v_data, t):
         
     res = linear_interpolation(u, v, t)
     
-    # Formateo de salida para la comparación en utils.py
-    if isinstance(res, (Vector, Matrix)):
-        return res.data
+    # Formateo de salida: Redondeamos A 5 DECIMALES en TODAS las estructuras 
+    # para evitar falsos negativos por la precisión de coma flotante de la CPU.
+    if isinstance(res, Vector):
+        return [round(x, 5) for x in res.data]
+    elif isinstance(res, Matrix):
+        return [[round(x, 5) for x in row] for row in res.data]
     elif isinstance(res, float):
-        return round(res, 5) # Evita falsos negativos por precisión de flotantes
+        return round(res, 5)
+        
     return res
 
 def run():

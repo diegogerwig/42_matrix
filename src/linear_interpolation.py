@@ -1,7 +1,7 @@
 from vector import Vector
 from matrix import Matrix
 
-def linear_interpolation(u, v, t: float):
+def linear_interpolation(u, v, t: float):  # Conocida como 'lerp'
     """
     Calcula la interpolación lineal exacta entre u y v con un parámetro t.
     Soporta escalares (float, int), Vectores y Matrices.

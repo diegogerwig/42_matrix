@@ -154,7 +154,7 @@ La interpolación lineal (abreviada históricamente en software como `lerp`) es 
 
 Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias de físicas balísticas. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
 
-### 🧠 Lógica Matemática
+### 🧠 Lógica
 La fórmula base que utilizamos para escalar valores numéricos de forma estable es:
 `linear_interpolation(u, v, t) = (1 - t) * u + t * v`
 
@@ -162,12 +162,16 @@ Para estructuras complejas como Vectores y Matrices, la función aplica la misma
 
 ### 📊 Ejemplos de Flujo de Datos
 
-**1. Interpolar Escalares:**
+**Interpolar Escalares:**
 ```text
 linear_interpolation(21.0, 42.0, 0.3)
 -------------------------------------------------
 Cálculo: (1.0 - 0.3) * 21.0 + (0.3) * 42.0
 Resultado: 27.3  (Hemos avanzado el 30% de la distancia entre 21 y 42).
+```
+
+**Interpolar Vectores:**
+```text
 V1: [2.0,  1.0]
 V2: [4.0,  2.0]
 t:  0.3
