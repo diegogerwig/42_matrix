@@ -3,7 +3,6 @@ class Vector:
         if not isinstance(data, list):
             raise ValueError("La estructura base del Vector debe ser una lista.")
         
-        # Validación estricta de tipos numéricos
         for x in data:
             if not isinstance(x, (int, float, complex)):
                 raise ValueError("Los elementos del Vector deben ser numéricos (int, float, complex).")
@@ -29,5 +28,4 @@ class Vector:
             self.data[i] *= a
 
     def __str__(self):
-        # Usamos format simple para que soporte floats y complejos sin romper
         return "\n".join([f"[{x}]" for x in self.data])
