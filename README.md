@@ -118,7 +118,7 @@ Una combinación lineal es la expresión matemática construida al multiplicar u
 En este ejercicio se debe construir una función pura (que no modifica el estado original, sino que devuelve un nuevo `Vector`) para calcular la combinación lineal de un arreglo de vectores con sus respectivos coeficientes.
 
 <p align="center">
-  <img src="./doc/LinearCombination.png" width="70%" alt="Linear Combination">
+  <img src="./doc/Linear_Combination.png" width="70%" alt="Linear Combination">
 </p>
 
 
@@ -160,7 +160,7 @@ La interpolación lineal (abreviada históricamente en software como `lerp`) es 
 Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
 
 <p align="center">
-  <img src="./doc/LinearInterpolation.png" width="70%" alt="Linear Interpolation">
+  <img src="./doc/Linear_Interpolation.png" width="70%" alt="Linear Interpolation">
 </p>
 
 ### 🧠 Lógica
@@ -211,7 +211,7 @@ El producto escalar (o *dot product*, representado a menudo como $u \cdot v$ o $
 Geométricamente, el producto escalar es una medida de correlación direccional: nos indica qué tan alineados están dos vectores. Si el resultado es `0`, significa que los vectores son perfectamente perpendiculares entre sí. Es la pieza clave para calcular proyecciones ortogonales y resolver multiplicaciones matriciales.
 
 <p align="center">
-  <img src="./doc/DotProduct.png" width="70%" alt="Dot Product">
+  <img src="./doc/Dot_Product.png" width="70%" alt="Dot Product">
 </p>
 
 ### 🧠 Lógica y Optimización
@@ -263,3 +263,33 @@ Resultado: 0.0  (Forman un ángulo de 90° exactos)
 
 ---
 ---
+
+## EX04 - Norm
+
+### 💡 Descripción
+La norma es la abstracción matemática que utilizamos para medir el "tamaño", "longitud" o "magnitud" de un vector dentro de un espacio vectorial.
+Dependiendo de las reglas geométricas del espacio en el que estemos trabajando, la manera de viajar desde el origen hasta la punta del vector cambia. Por ello, hemos implementado las 3 normas fundamentales:
+
+1. **Norma L1 (Manhattan / Taxicab):** Suma absoluta de los componentes. Representa la distancia que tendrías que recorrer si estuvieras en una ciudad con manzanas cuadriculadas (sin poder cruzar en diagonal).
+2. **Norma L2 (Euclidiana):** La distancia en línea recta tradicional a través del espacio (aplicando el Teorema de Pitágoras generalizado).
+3. **Norma L-Infinito (Suprema):** Representa el componente absoluto de mayor tamaño. Se puede entender como "cuántos anillos concéntricos cuadrados" debes atravesar para llegar al punto.
+
+<p align="center">
+  <img src="./doc/Manhattan-Euclidean_Distance_1.png" width="70%" alt="Manhattan vs Euclidean Distance">
+  <br>
+  <img src="./doc/Manhattan-Euclidean_Distance_2.png" width="70%" alt="Manhattan vs Euclidean Distance">
+
+</p>
+
+### 🧠 Lógica
+El algoritmo sigue estrictamente las especificaciones de librerías permitidas. En lugar de utilizar `math.sqrt` (que no está en la lista de permitidas), la norma Euclidiana (L2) se calcula utilizando `pow(res, 0.5)` sobre el acumulador FMA de cuadrados, y el valor absoluto se procesa lógicamente con operadores de signo base sin requerir `abs()`, logrando en las 3 funciones una complejidad garantizada de $O(n)$ en tiempo y $O(1)$ en espacio extra.
+
+### 📊 Ejemplo de Flujo de Datos
+
+```text
+Vector: u = [-4.0, -2.0]
+-------------------------------------------------
+Norma 1 (Manhattan): |-4.0| + |-2.0| = 6.0
+Norma 2 (Euclidiana): sqrt((-4.0)² + (-2.0)²) = 4.472135955
+Norma Suprema (Inf): max(|-4.0|, |-2.0|) = 4.0
+```
