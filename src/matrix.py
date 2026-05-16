@@ -80,5 +80,21 @@ class Matrix:
                         
         return Matrix(res_data)
 
+    def trace(self) -> float:
+        """
+        Calcula la traza de la matriz (suma de la diagonal principal).
+        Solo está definida para matrices cuadradas.
+        Complejidad temporal: O(n) donde n es el número de filas/columnas.
+        Complejidad espacial: O(1).
+        """
+        if self.shape[0] != self.shape[1]:
+            raise ValueError("La traza solo está definida para matrices cuadradas.")
+            
+        res = 0.0
+        for i in range(self.shape[0]):
+            res += float(self.data[i][i])
+            
+        return res
+
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])
