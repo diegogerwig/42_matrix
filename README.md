@@ -117,7 +117,10 @@ Una combinación lineal es la expresión matemática construida al multiplicar u
 
 En este ejercicio se debe construir una función pura (que no modifica el estado original, sino que devuelve un nuevo `Vector`) para calcular la combinación lineal de un arreglo de vectores con sus respectivos coeficientes.
 
-![](./doc/LinearCombination.png)
+<p align="center">
+  <img src="./doc/LinearCombination.png" width="70%" alt="Linear Combination">
+</p>
+
 
 ### 🧠 Lógica y Optimización (FMA)
 La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo y espacio.
@@ -155,8 +158,6 @@ Estado Final Vector:
 La interpolación lineal (abreviada históricamente en software como `lerp`) es una operación matemática fundamental para crear transiciones. Genera un valor exacto a medio camino entre un punto de inicio ($A$) y un punto final ($B$) basándose en un parámetro $t$, que actúa como un porcentaje (donde $0.0$ es el 0% y $1.0$ es el 100%).
 
 Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
-
-![](./doc/LinearInterpolation.png)
 
 <p align="center">
   <img src="./doc/LinearInterpolation.png" width="70%" alt="Linear Interpolation">
@@ -209,7 +210,9 @@ El producto escalar (o *dot product*, representado a menudo como $u \cdot v$ o $
 
 Geométricamente, el producto escalar es una medida de correlación direccional: nos indica qué tan alineados están dos vectores. Si el resultado es `0`, significa que los vectores son perfectamente perpendiculares entre sí. Es la pieza clave para calcular proyecciones ortogonales y resolver multiplicaciones matriciales.
 
-![](./doc/DotProduct.png)
+<p align="center">
+  <img src="./doc/DotProduct.png" width="70%" alt="Dot Product">
+</p>
 
 ### 🧠 Lógica y Optimización
 Para calcularlo, se multiplican las componentes homólogas de ambos vectores (X con X, Y con Y, etc.) y se suman todos esos productos parciales en un único acumulador escalar.
