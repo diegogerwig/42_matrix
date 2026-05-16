@@ -53,12 +53,13 @@ Tabla de referencia con el comportamiento algebraico y operacional de las estruc
 | **Matrix** | Arreglo bidimensional (`list[list]`) | Mismo `shape` (filas $\times$ columnas) | Modificación elemento a elemento (*in-place*). |
 | **Escalar** | Número flotante (`float`) o Complejo | Universal (aplica a cualquier dimensión) | Escala la magnitud homogéneamente (*distributivo*). |
 
+---
+
 ## Documentación
 
 https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
 
 ---
-
 ---
 
 ## EX00 - Add, Subtract and Scale
@@ -104,3 +105,7 @@ Factor Escalar (a):      2.0
 Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] <- Mutado in-place
 
 ```
+
+---
+---
+
