@@ -152,11 +152,21 @@ Estado Final Vector:
 ### 💡 Descripción
 La interpolación lineal (abreviada históricamente en software como `lerp`) es una operación matemática fundamental para crear transiciones. Genera un valor exacto a medio camino entre un punto de inicio ($A$) y un punto final ($B$) basándose en un parámetro $t$, que actúa como un porcentaje (donde $0.0$ es el 0% y $1.0$ es el 100%).
 
-Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias de físicas balísticas. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
+Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
 
 ### 🧠 Lógica
-La fórmula base que utilizamos para escalar valores numéricos de forma estable es:
+La interpolación lineal funciona como un **promedio ponderado** o una balanza entre dos valores. A medida que el porcentaje $t$ avanza de $0.0$ a $1.0$, el peso o la influencia del punto inicial ($u$) disminuye, mientras que la del punto final ($v$) aumenta de forma inversamente proporcional.
+
+La fórmula que utilizamos en el código es:
 `linear_interpolation(u, v, t) = (1 - t) * u + t * v`
+
+**¿Por qué utilizamos esta fórmula y no la clásica `u + t * (v - u)`?**
+Aunque matemáticamente ambas expresiones son idénticas (significan "empieza en $u$ y suma un porcentaje de la distancia total hasta $v$"), en ciencias de la computación utilizamos la forma de "promedio ponderado" por dos razones críticas:
+
+1. **Garantía de los Extremos:** Asegura un anclaje perfecto en los límites.
+   * Cuando $t = 0.0$: la fórmula se reduce a `(1 * u) + (0 * v)`, devolviendo exactamente **$u$**.
+   * Cuando $t = 1.0$: la fórmula se reduce a `(0 * u) + (1 * v)`, devolviendo exactamente **$v$**.
+2. **Estabilidad de Punto Flotante (IEEE 754):** Debido a cómo los procesadores manejan los números decimales en binario, la resta `(v - u)` de la fórmula clásica puede generar pequeños errores de redondeo. Al multiplicar ese error por $t$ y sumárselo a $u$, es muy probable que cuando $t = 1.0$, el resultado final no sea exactamente $v$, dejando un "residuo" decimal indeseado. Nuestra fórmula mitigará este problema de hardware distribuyendo la multiplicación.
 
 Para estructuras complejas como Vectores y Matrices, la función aplica la misma fórmula iterando de forma paralela (componente a componente).
 

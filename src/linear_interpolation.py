@@ -1,7 +1,7 @@
 from vector import Vector
 from matrix import Matrix
 
-def linear_interpolation(u, v, t: float):  # Conocida como 'lerp'
+def lerp(u, v, t: float): 
     """
     Calcula la interpolación lineal exacta entre u y v con un parámetro t.
     Soporta escalares (float, int), Vectores y Matrices.
@@ -23,7 +23,7 @@ def linear_interpolation(u, v, t: float):  # Conocida como 'lerp'
         if len(u.data) != len(v.data):
             raise ValueError("Los vectores deben tener la misma dimensión.")
         # Aplicamos la interpolación a cada par de coordenadas
-        return Vector([linear_interpolation(u_i, v_i, t) for u_i, v_i in zip(u.data, v.data)])
+        return Vector([lerp(u_i, v_i, t) for u_i, v_i in zip(u.data, v.data)])
 
     # 3. Caso Recursivo: Interpolar Matrices
     elif isinstance(u, Matrix):
@@ -32,7 +32,7 @@ def linear_interpolation(u, v, t: float):  # Conocida como 'lerp'
         # Aplicamos la interpolación iterando sobre cada fila y cada elemento
         res_data = []
         for row_u, row_v in zip(u.data, v.data):
-            res_data.append([linear_interpolation(x, y, t) for x, y in zip(row_u, row_v)])
+            res_data.append([lerp(x, y, t) for x, y in zip(row_u, row_v)])
         return Matrix(res_data)
 
     else:
