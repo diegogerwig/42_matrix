@@ -1,5 +1,4 @@
-```python
-readme_content = """# 🧮 Matrix
+# 🧮 Matrix
 
 ---
 
@@ -15,7 +14,7 @@ El archivo `setup.sh` detecta automáticamente tu sistema operativo, inicializa 
 | **`bash setup.sh test`** | **(Opción por defecto)** Crea/limpia el entorno, instala dependencias con `uv` y ejecuta **todos** los tests de la carpeta `tests/` en orden. |
 | **`bash setup.sh test 00`** | Filtra la automatización para ejecutar únicamente las pruebas del Ejercicio 00. |
 | **`bash setup.sh venv`** | Configura el entorno y abre una terminal interactiva con el entorno virtual activo y el `PYTHONPATH` listo para reconocer la carpeta `src/`. |
-| **`bash setup.sh clean`** | Borra el entorno virtual `matrix_venv` y limpia recursivamente los archivos de caché `__pycache__`. |
+| **`bash setup.sh clean`** | Borra el entorno virtual `.matrix_venv` y limpia recursivamente los archivos de caché `__pycache__`. |
 
 ### 2. Ejecución Individual de Tests
 Si deseas ejecutar las pruebas de un solo ejercicio de forma aislada con el entorno virtual previamente activado (utilizando `setup.sh venv`), puedes invocar el archivo de pruebas directamente:
@@ -52,7 +51,7 @@ Tabla de referencia con el comportamiento algebraico y operacional de las estruc
 | --- | --- | --- | --- |
 | **Vector** | Arreglo unidimensional (`list`) | Longitud idéntica para `add` / `sub` | Modificación coordenada a coordenada (*in-place*). |
 | **Matrix** | Arreglo bidimensional (`list[list]`) | Mismo `shape` (filas $\times$ columnas) | Modificación elemento a elemento (*in-place*). |
-| **Escalar** | Número flotante (`f32`) o Complejo | Universal (aplica a cualquier dimensión) | Escala la magnitud homogéneamente (*distributivo*). |
+| **Escalar** | Número flotante (`float`) o Complejo | Universal (aplica a cualquier dimensión) | Escala la magnitud homogéneamente (*distributivo*). |
 
 ---
 
@@ -99,124 +98,5 @@ Matriz Inicial (m1):     [[1.0, 2.0], [3.0, 4.0]]
 Factor Escalar (a):      2.0
 -------------------------------------------------
 Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] <- Mutado in-place
-
-```
-
-"""
-
-with open("README.md", "w", encoding="utf-8") as f:
-f.write(readme_content)
-
-```
-Tu archivo MD (Markdown) está listo
-[file-tag: code-generated-file-0-1778924326988450017]
-
-Además del archivo generado, aquí tienes el contenido del `README.md` directamente en un bloque de código para que puedas copiarlo y pegarlo fácilmente en tu proyecto:
-
-```markdown
-# 🧮 Enter the Matrix
-
----
-
-## 🛠️ Guía de Uso del Entorno
-
-Este proyecto utiliza un entorno automatizado gestionado con **`uv`** para garantizar una instalación ultrarrápida de las dependencias y una ejecución robusta de las pruebas en cualquier sistema (WSL, Linux 42, etc.).
-
-### 1. El Script Maestro: `setup.sh`
-El archivo `setup.sh` detecta automáticamente tu sistema operativo, inicializa el entorno de forma eficiente mediante `uv` e instala las dependencias de desarrollo necesarias.
-
-| Comando | Descripción |
-| :--- | :--- |
-| **`bash setup.sh test`** | **(Opción por defecto)** Crea/limpia el entorno, instala dependencias con `uv` y ejecuta **todos** los tests de la carpeta `tests/` en orden. |
-| **`bash setup.sh test 00`** | Filtra la automatización para ejecutar únicamente las pruebas del Ejercicio 00. |
-| **`bash setup.sh venv`** | Configura el entorno y abre una terminal interactiva con el entorno virtual activo y el `PYTHONPATH` listo para reconocer la carpeta `src/`. |
-| **`bash setup.sh clean`** | Borra el entorno virtual `matrix_venv` y limpia recursivamente los archivos de caché `__pycache__`. |
-
-### 2. Ejecución Individual de Tests
-Si deseas ejecutar las pruebas de un solo ejercicio de forma aislada con el entorno virtual previamente activado (utilizando `setup.sh venv`), puedes invocar el archivo de pruebas directamente:
-
-```bash
-python3 tests/test_ex00.py
-
-```
-
-### 3. Ejecución Manual del Código
-
-Si quieres verificar el comportamiento in-place de las estructuras interactivamente, puedes arrancar Python dentro del entorno y operar tus clases de la siguiente manera:
-
-```python
-from vector import Vector
-from matrix import Matrix
-
-u = Vector([2.0, 3.0])
-v = Vector([5.0, 7.0])
-u.add(v)
-print(u)
-# [7.0]
-# [10.0]
-
-```
-
----
-
-## ⚡ Guía Rápida de Componentes y Restricciones
-
-Tabla de referencia con el comportamiento algebraico y operacional de las estructuras de la librería:
-
-| Estructura | Representación Operativa | Restricción Dimensional | Efecto Matemático / Lógico |
-| --- | --- | --- | --- |
-| **Vector** | Arreglo unidimensional (`list`) | Longitud idéntica para `add` / `sub` | Modificación coordenada a coordenada (*in-place*). |
-| **Matrix** | Arreglo bidimensional (`list[list]`) | Mismo `shape` (filas $\times$ columnas) | Modificación elemento a elemento (*in-place*). |
-| **Escalar** | Número flotante (`f32`) o Complejo | Universal (aplica a cualquier dimensión) | Escala la magnitud homogéneamente (*distributivo*). |
-
----
-
----
-
-## EX00 - Add, Subtract and Scale
-
-### 💡 Descripción
-
-Este ejercicio establece las operaciones elementales fundamentales de nuestro espacio vectorial. El objetivo es implementar los mecanismos para sumar, restar y escalar vectores y matrices. De acuerdo con las especificaciones técnicas del módulo, todas las transformaciones se deben realizar **in-place** (mutando internamente la instancia que invoca el método), minimizando la sobrecarga en memoria.
-
-### 🧠 Lógica
-
-Para garantizar la consistencia matemática antes de proceder con cualquier mutación interna, el sistema aplica validaciones estructurales estrictas:
-
-1. **La Suma Parcial y Resta (`add` / `sub`)**:
-La operación se realiza elemento a elemento en la misma posición de la cuadrícula o arreglo.
-* En **Vectores**: Se verifica que `len(self.data) == len(v.data)`.
-* En **Matrices**: Se verifica que las tuplas de dimensiones `shape` sean idénticas tanto en número de filas como de columnas.
-* Si las dimensiones difieren, la operación carece de sentido algebraico, por lo que se interrumpe lanzando un error de valor (`ValueError`).
-
-
-2. **El Escalado Homogéneo (`scl`)**:
-La operación multiplica cada componente del contenedor por un factor numérico escalar común $\alpha$. Al tratarse de una transformación lineal pura, altera la magnitud del objeto conservando intacta su geometría y proporciones dimensionales originales.
-
-### 📊 Ejemplo de Flujo de Datos (In-place)
-
-En cada llamada, la instancia que ejecuta el método absorbe los cambios directamente en sus arreglos internos.
-
-#### Operación en Vectores: `u.add(v)`
-
-```text
-Vector Inicial (u):      [2.0, 3.0]
-Vector Entrada (v):      [5.0, 7.0]
----------------------------------------
-Estado Final (u.data):   [7.0, 10.0]   <- Mutado in-place
-
-```
-
-#### Operación en Matrices: `m1.scl(2.0)`
-
-```text
-Matriz Inicial (m1):     [[1.0, 2.0], [3.0, 4.0]]
-Factor Escalar (a):      2.0
--------------------------------------------------
-Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] <- Mutado in-place
-
-```
-
-```
 
 ```
