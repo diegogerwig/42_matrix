@@ -75,16 +75,16 @@ En cada llamada, la instancia que ejecuta el método absorbe los cambios directa
 Vector Inicial (u):      [2.0, 3.0]
 Vector Entrada (v):      [5.0, 7.0]
 ---------------------------------------
-Estado Final (u.data):   [7.0, 10.0]   <- Mutado in-place
+Estado Final (u.data):   [7.0, 10.0]   
 ```
 
-#### Operación en Matrices: `m1.scl(2.0)`
+#### Operación en Matrices: `m1.scl(a)`
 
 ```text
 Matriz Inicial (m1):     [[1.0, 2.0], [3.0, 4.0]]
 Factor Escalar (a):      2.0
 -------------------------------------------------
-Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] <- Mutado in-place
+Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] 
 ```
 
 ---
