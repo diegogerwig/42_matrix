@@ -19,10 +19,8 @@ def dot(u: 'Vector', v: 'Vector') -> float:
     result = 0.0
     use_fma = hasattr(math, 'fma')
     
-    # Recorremos ambos vectores paralelamente
     for u_i, v_i in zip(u.data, v.data):
         if use_fma:
-            # Multiplica y suma al acumulador en un solo ciclo de reloj
             result = math.fma(float(u_i), float(v_i), result)
         else:
             result += float(u_i) * float(v_i)
