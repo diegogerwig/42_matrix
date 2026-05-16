@@ -39,58 +39,70 @@ def wrapper_mat_scl(u_data, scalar):
 def run():
     print_header(0, "ADD, SUBTRACT AND SCALE")
 
-    # ----- VECTORES -----
+    # CASOS DE VECTORES 
     vec_add_cases = [
-        (([2., 3.], [5., 7.]), [7., 10.]),
         (([0., 0.], [0., 0.]), [0., 0.]),
-        (([-5., 2.], [5., -2.]), [0., 0.]),
-        (([1.], [1.]), [2.]),
-        # Casos de error de dimensiones
+        (([1., 0.], [0., 1.]), [1., 1.]),
+        (([1., 1.], [1., 1.]), [2., 2.]),
+        (([21., 21.], [21., 21.]), [42., 42.]),
+        (([-21., 21.], [21., -21.]), [0., 0.]),
+        (([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.], [9., 8., 7., 6., 5., 4., 3., 2., 1., 0.]), [9., 9., 9., 9., 9., 9., 9., 9., 9., 9.]),
+        # Casos de error
         (([1., 2.], [1., 2., 3.]), None)
     ]
     
     vec_sub_cases = [
-        (([2., 3.], [5., 7.]), [-3., -4.]),
-        (([5., 7.], [2., 3.]), [3., 4.]),
+        (([0., 0.], [0., 0.]), [0., 0.]),
+        (([1., 0.], [0., 1.]), [1., -1.]),
+        (([1., 1.], [1., 1.]), [0., 0.]),
+        (([21., 21.], [21., 21.]), [0., 0.]),
+        (([-21., 21.], [21., -21.]), [-42., 42.]),
+        (([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.], [9., 8., 7., 6., 5., 4., 3., 2., 1., 0.]), [-9., -7., -5., -3., -1., 1., 3., 5., 7., 9.]),
         # Casos de error
         (([1.], [1., 2.]), None)
     ]
 
     vec_scl_cases = [
-        (([2., 3.], 2.), [4., 6.]),
-        (([2., 3.], 0.), [0., 0.]),
-        (([2., 3.], -1.), [-2., -3.])
+        (([0., 0.], 1.), [0., 0.]),
+        (([1., 0.], 1.), [1., 0.]),
+        (([1., 1.], 2.), [2., 2.]),
+        (([21., 21.], 2.), [42., 42.]),
+        (([42., 42.], 0.5), [21., 21.])
     ]
 
-    # ----- MATRICES -----
-    m1 = [[1., 2.], [3., 4.]]
-    m2 = [[7., 4.], [-2., 2.]]
-    
+    # CASOS DE MATRICES
     mat_add_cases = [
-        ((m1, m2), [[8., 6.], [1., 6.]]),
-        # Caso error (diferente shape)
-        ((m1, [[1.]]), None)
+        (([[0., 0.], [0., 0.]], [[0., 0.], [0., 0.]]), [[0., 0.], [0., 0.]]),
+        (([[1., 0.], [0., 1.]], [[0., 0.], [0., 0.]]), [[1., 0.], [0., 1.]]),
+        (([[1., 1.], [1., 1.]], [[1., 1.], [1., 1.]]), [[2., 2.], [2., 2.]]),
+        (([[21., 21.], [21., 21.]], [[21., 21.], [21., 21.]]), [[42., 42.], [42., 42.]]),
+        # Casos de error 
+        (([[1., 2.], [3., 4.]], [[1.]]), None)  
     ]
 
     mat_sub_cases = [
-        ((m1, m2), [[-6., -2.], [5., 2.]])
+        (([[0., 0.], [0., 0.]], [[0., 0.], [0., 0.]]), [[0., 0.], [0., 0.]]),
+        (([[1., 0.], [0., 1.]], [[0., 0.], [0., 0.]]), [[1., 0.], [0., 1.]]),
+        (([[1., 1.], [1., 1.]], [[1., 1.], [1., 1.]]), [[0., 0.], [0., 0.]]),
+        (([[21., 21.], [21., 21.]], [[21., 21.], [21., 21.]]), [[0., 0.], [0., 0.]]),
     ]
 
     mat_scl_cases = [
-        ((m1, 2.), [[2., 4.], [6., 8.]]),
-        ((m1, 0.), [[0., 0.], [0., 0.]])
+        (([[0., 0.], [0., 0.]], 0.), [[0., 0.], [0., 0.]]),
+        (([[1., 0.], [0., 1.]], 1.), [[1., 0.], [0., 1.]]),
+        (([[1., 2.], [3., 4.]], 2.), [[2., 4.], [6., 8.]]),
+        (([[21., 21.], [21., 21.]], 0.5), [[10.5, 10.5], [10.5, 10.5]]),
     ]
 
-    # Ejecución con el formateo exacto de utils.py
     print(f"\n{CYAN}--- Pruebas de Vectores ---{NC}")
     run_cases(0, wrapper_vec_add, vec_add_cases, custom_desc_func=lambda u, v: f"Vector.add({u}, {v})")
     run_cases(0, wrapper_vec_sub, vec_sub_cases, custom_desc_func=lambda u, v: f"Vector.sub({u}, {v})")
     run_cases(0, wrapper_vec_scl, vec_scl_cases, custom_desc_func=lambda u, s: f"Vector.scl({u}, {s})")
 
     print(f"\n{CYAN}--- Pruebas de Matrices ---{NC}")
-    run_cases(0, wrapper_mat_add, mat_add_cases, custom_desc_func=lambda u, v: f"Matrix.add({u}, {v})")
-    run_cases(0, wrapper_mat_sub, mat_sub_cases, custom_desc_func=lambda u, v: f"Matrix.sub({u}, {v})")
-    run_cases(0, wrapper_mat_scl, mat_scl_cases, custom_desc_func=lambda u, s: f"Matrix.scl({u}, {s})")
+    run_cases(0, wrapper_mat_add, mat_add_cases, custom_desc_func=lambda u, v: f"Matrix.add()")
+    run_cases(0, wrapper_mat_sub, mat_sub_cases, custom_desc_func=lambda u, v: f"Matrix.sub()")
+    run_cases(0, wrapper_mat_scl, mat_scl_cases, custom_desc_func=lambda u, s: f"Matrix.scl({s})")
 
 
 if __name__ == "__main__":

@@ -10,8 +10,38 @@ NC='\033[0m'
 # ==========================================
 # 0. LECTURA DE ARGUMENTOS Y VERIFICACIÓN
 # ==========================================
+
+if [ "$#" -gt 2 ]; then
+    echo -e "${B_RED}❌ Error: Demasiados argumentos ($#). Se esperaban máximo 2.${NC}"
+    echo -e "${B_YELLOW}Uso correcto:${NC}"
+    echo -e "  bash setup.sh           -> [Default] Crea/usa venv y ejecuta TODOS los tests."
+    echo -e "  bash setup.sh test      -> Crea/usa venv, ejecuta TODOS los tests y sale."
+    echo -e "  bash setup.sh test x    -> Ejecuta SOLO el test x (admite del 0 al 15)."
+    echo -e "  bash setup.sh venv      -> Crea/usa venv y lo deja activado en la terminal."
+    echo -e "  bash setup.sh clean     -> Borra el entorno virtual y limpia las cachés."
+    exit 1
+fi
+
 MODE=${1:-test}
 SPECIFIC_TEST=$2
+
+if [[ "$MODE" != "test" && "$MODE" != "venv" && "$MODE" != "clean" ]]; then
+    echo -e "${B_RED}❌ Argumento inválido: $MODE${NC}"
+    echo -e "${B_YELLOW}Uso correcto:${NC}"
+    echo -e "  bash setup.sh           -> [Default] Crea/usa venv y ejecuta TODOS los tests."
+    echo -e "  bash setup.sh test      -> Crea/usa venv, ejecuta TODOS los tests y sale."
+    echo -e "  bash setup.sh test x    -> Ejecuta SOLO el test x (admite del 0 al 15)."
+    echo -e "  bash setup.sh venv      -> Crea/usa venv y lo deja activado en la terminal."
+    echo -e "  bash setup.sh clean     -> Borra el entorno virtual y limpia las cachés."
+    exit 1
+fi
+
+if [[ -n "$SPECIFIC_TEST" ]]; then
+    if ! [[ "$SPECIFIC_TEST" =~ ^[0-9]+$ ]] || [ "$SPECIFIC_TEST" -lt 0 ] || [ "$SPECIFIC_TEST" -gt 15 ]; then
+        echo -e "${B_RED}❌ Error: El número de test debe ser un valor numérico entre 0 y 15.${NC}"
+        exit 1
+    fi
+fi
 
 if ! command -v uv &> /dev/null; then
     echo -e "${B_RED}❌ Error: 'uv' no está instalado. Por favor, instálalo primero.${NC}"
@@ -22,21 +52,17 @@ fi
 # 1. DETECCIÓN DE ENTORNO Y RUTA DEL VENV
 # ==========================================
 OS_NAME=$(uname -s)
-KERNEL_RELEASE=$(uname -r)
 USER_HOME=$HOME
 
-if [[ "$KERNEL_RELEASE" == *"Microsoft"* || "$KERNEL_RELEASE" == *"WSL"* ]]; then
-    TARGET_DIR="$USER_HOME"
-    VENV_NAME=".matrix_venv"
-    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Windows/WSL${NC}"
-elif [[ "$OS_NAME" == "Linux" && -d "$USER_HOME/sgoinfre" ]]; then
+if [[ "$OS_NAME" == "Linux" && -d "$USER_HOME/sgoinfre" ]]; then
     TARGET_DIR="$USER_HOME/sgoinfre"
     VENV_NAME="matrix_venv"
     echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Linux (42 Campus)${NC}"
 else
-    TARGET_DIR="$USER_HOME"
-    VENV_NAME="matrix_venv"
-    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Otro${NC}"
+    # Estándar absoluto: carpeta .venv en la raíz del proyecto
+    TARGET_DIR="$(pwd)"
+    VENV_NAME=".venv"
+    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Local / WSL${NC}"
 fi
 
 VENV_PATH="$TARGET_DIR/$VENV_NAME"

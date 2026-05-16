@@ -24,23 +24,6 @@ python3 tests/test_ex00.py
 
 ```
 
-### 3. Ejecución Manual del Código
-
-Si quieres verificar el comportamiento in-place de las estructuras interactivamente, puedes arrancar Python dentro del entorno y operar tus clases de la siguiente manera:
-
-```python
-from vector import Vector
-from matrix import Matrix
-
-u = Vector([2.0, 3.0])
-v = Vector([5.0, 7.0])
-u.add(v)
-print(u)
-# [7.0]
-# [10.0]
-
-```
-
 ---
 
 ## ⚡ Guía Rápida de Componentes y Restricciones
@@ -55,9 +38,9 @@ Tabla de referencia con el comportamiento algebraico y operacional de las estruc
 
 ---
 
-## Documentación
+## 📖 Documentación
 
-https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
+[Essence of linear algrebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
 
 ---
 ---
@@ -93,7 +76,6 @@ Vector Inicial (u):      [2.0, 3.0]
 Vector Entrada (v):      [5.0, 7.0]
 ---------------------------------------
 Estado Final (u.data):   [7.0, 10.0]   <- Mutado in-place
-
 ```
 
 #### Operación en Matrices: `m1.scl(2.0)`
@@ -103,7 +85,6 @@ Matriz Inicial (m1):     [[1.0, 2.0], [3.0, 4.0]]
 Factor Escalar (a):      2.0
 -------------------------------------------------
 Estado Final (m1.data):  [[2.0, 4.0], [6.0, 8.0]] <- Mutado in-place
-
 ```
 
 ---
