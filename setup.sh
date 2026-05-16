@@ -7,61 +7,122 @@ B_YELLOW='\033[1;33m'
 B_RED='\033[1;31m'
 NC='\033[0m'
 
+# ==========================================
+# 0. LECTURA DE ARGUMENTOS Y VERIFICACIÓN
+# ==========================================
 MODE=${1:-test}
 SPECIFIC_TEST=$2
 
-# Verificación de uv
 if ! command -v uv &> /dev/null; then
     echo -e "${B_RED}❌ Error: 'uv' no está instalado. Por favor, instálalo primero.${NC}"
     exit 1
 fi
 
-TARGET_DIR="$HOME"
-if [[ "$(uname -s)" == "Linux" && -d "$HOME/sgoinfre" ]]; then
-    TARGET_DIR="$HOME/sgoinfre"
+# ==========================================
+# 1. DETECCIÓN DE ENTORNO Y RUTA DEL VENV
+# ==========================================
+OS_NAME=$(uname -s)
+KERNEL_RELEASE=$(uname -r)
+USER_HOME=$HOME
+
+if [[ "$KERNEL_RELEASE" == *"Microsoft"* || "$KERNEL_RELEASE" == *"WSL"* ]]; then
+    TARGET_DIR="$USER_HOME"
+    VENV_NAME=".matrix_venv"
+    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Windows/WSL${NC}"
+elif [[ "$OS_NAME" == "Linux" && -d "$USER_HOME/sgoinfre" ]]; then
+    TARGET_DIR="$USER_HOME/sgoinfre"
+    VENV_NAME="matrix_venv"
+    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Linux (42 Campus)${NC}"
+else
+    TARGET_DIR="$USER_HOME"
+    VENV_NAME="matrix_venv"
+    echo -e "\n${B_YELLOW}🖥️  Sistema detectado: Otro${NC}"
 fi
 
-VENV_PATH="$TARGET_DIR/.matrix_venv"
+VENV_PATH="$TARGET_DIR/$VENV_NAME"
 unset TEST_RESULTS
 declare -a TEST_RESULTS=()
 ALL_TESTS_PASSED=true
 
 echo -e "\n${B_BLUE}╔═══════════════════════════════════╗${NC}"
-echo -e   "${B_BLUE}║             MATRIX                ║${NC}"
+echo -e   "${B_BLUE}║              MATRIX               ║${NC}"
 echo -e   "${B_BLUE}╚═══════════════════════════════════╝${NC}"
 
+# ==========================================
+# 2. MODO CLEAN
+# ==========================================
 if [[ "$MODE" == "clean" ]]; then
-    echo -ne "${B_CYAN}🧹 Limpiando cachés y entorno virtual...${NC}"
+    echo -e "\n${B_CYAN}⚙️  Modo seleccionado: ${NC}clean"
+    echo -ne "${B_CYAN}🧹 Limpiando cachés...${NC}"
     find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
-    rm -rf "$VENV_PATH"
     echo -e " ${B_GREEN}Hecho.${NC}"
+
+    if [ -d "$VENV_PATH" ]; then
+        echo -ne "${B_YELLOW}⚙️  Borrando entorno virtual en $VENV_PATH...${NC}"
+        rm -rf "$VENV_PATH"
+        echo -e " ${B_GREEN}Hecho.${NC}"
+    fi
     exit 0
 fi
 
-# Creación del entorno virtual con uv
+echo -e "\n${B_CYAN}📂 Ruta del entorno: ${NC}$VENV_PATH"
+echo -e "${B_CYAN}⚙️  Modo seleccionado: ${NC}$MODE"
+if [[ -n "$SPECIFIC_TEST" ]]; then
+    echo -e "${B_CYAN}🎯 Filtro de test: ${NC}Ejercicio $(printf "%02d" "$SPECIFIC_TEST")"
+fi
+
+echo -ne "${B_CYAN}🧹 Limpiando cachés...${NC}"
+find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+echo -e " ${B_GREEN}Hecho.${NC}"
+
+# ==========================================
+# 3. CREACIÓN Y ACTIVACIÓN DEL VENV CON UV
+# ==========================================
 if [ ! -d "$VENV_PATH" ]; then
     echo -ne "${B_YELLOW}⚙️  Creando entorno virtual con uv...${NC}"
+    mkdir -p "$TARGET_DIR"
     uv venv "$VENV_PATH" > /dev/null 2>&1
     echo -e " ${B_GREEN}Hecho.${NC}"
+else
+    echo -e "${B_CYAN}⚙️  Entorno virtual detectado. Omitiendo creación...${NC}"
 fi
 
 source "$VENV_PATH/bin/activate"
 
+PY_VER=$(python3 --version)
+PY_LOC=$(which python3)
+echo -e "${B_GREEN}🐍 Python Activo:${NC} $PY_VER"
+echo -e "   └── $PY_LOC"
+
 # Instalación ultrarrápida con uv pip
 if [ -f "requirements.txt" ]; then
-    echo -ne "${B_YELLOW}📦 Instalando dependencias con uv...${NC}"
+    echo -ne "${B_YELLOW}📦 Verificando dependencias con uv (requirements.txt)...${NC}"
     uv pip install -r requirements.txt > /dev/null 2>&1
-    echo -e " ${B_GREEN}Hecho.${NC}"
+    if [ $? -eq 0 ]; then
+        echo -e " ${B_GREEN}Hecho.${NC}"
+    else
+        echo -e "\n${B_RED}❌ Error instalando/verificando dependencias.${NC}"
+        exit 1
+    fi
+else
+    echo -e "${B_CYAN}ℹ️  No se encontró requirements.txt${NC}"
 fi
 
+# ==========================================
+# 4. RAMIFICACIÓN SEGÚN EL MODO ELEGIDO
+# ==========================================
 if [[ "$MODE" == "venv" ]]; then
-    echo -e "\n${B_GREEN}✅ Entorno virtual preparado.${NC}"
+    echo -e "\n${B_GREEN}✅ Entorno virtual preparado y listo para usar.${NC}"
+    echo -e "${B_CYAN}🚀 Entrando al entorno interactivo...${NC}"
+    echo -e "${B_YELLOW}(Escribe 'exit' o presiona Ctrl+D para salir y desactivarlo)${NC}\n"
+
     TMP_RC=$(mktemp)
     cat ~/.bashrc > "$TMP_RC" 2>/dev/null
     echo "source '$VENV_PATH/bin/activate'" >> "$TMP_RC"
     echo "export PYTHONPATH=\"\$PYTHONPATH:$(pwd)/src\"" >> "$TMP_RC"
     echo "rm -f '$TMP_RC'" >> "$TMP_RC"
     exec bash --rcfile "$TMP_RC"
+
 else
     export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 
@@ -77,6 +138,7 @@ else
             echo -e "\n${B_BLUE}────────────────────────────────────────────────────────────────${NC}"
             echo -e "${B_YELLOW} 🚀 EJECUTANDO ARCHIVO: ${B_CYAN}$(basename "$file")${NC}"
             echo -e "${B_BLUE}────────────────────────────────────────────────────────────────${NC}"
+            
             python3 "$file"
             
             if [ $? -eq 0 ]; then
@@ -85,9 +147,31 @@ else
                 TEST_RESULTS+=("${B_RED}✘ FAIL${NC}  $(basename "$file")")
                 ALL_TESTS_PASSED=false
             fi
+
+            # Interfaz interactiva de pausa y prueba manual
+            PREFIX=$(basename "$file" | grep -o 'ex[0-9]\{2\}')
+            while true; do
+                echo -e "\n${B_CYAN}╭────────────────────────────────────────────────────────╮${NC}"
+                echo -e "${B_CYAN}│ ⌛ ESPERANDO CONFIRMACIÓN...                           │${NC}"
+                echo -e "${B_CYAN}╰────────────────────────────────────────────────────────╯${NC}"
+                echo -e "${B_YELLOW} ↳ Presiona [ENTER] para avanzar al siguiente test.${NC}"
+                echo -e "${B_YELLOW} ↳ O escribe un comando Python para probar a mano (ej: 'python3 src/main.py').${NC}\n"
+                
+                echo -ne "${B_GREEN} > ${NC}"
+                read -r user_input
+
+                if [[ -z "$user_input" ]]; then
+                    break
+                else
+                    eval $user_input
+                fi
+            done
         done
     fi
 
+# ==========================================
+# 5. RESUMEN FINAL
+# ==========================================
     echo -e "\n${B_BLUE}╔═══════════════════════════════════╗${NC}"
     echo -e "${B_BLUE}║          RESUMEN FINAL            ║${NC}"
     echo -e "${B_BLUE}╚═══════════════════════════════════╝${NC}\n"
@@ -96,9 +180,10 @@ else
         echo -e "  $result"
     done
 
+    echo ""
     if [ "$ALL_TESTS_PASSED" = true ]; then
-        echo -e "\n${B_GREEN}✅ RESULTADO GLOBAL: TODO OK${NC}\n"
+        echo -e "${B_GREEN}✅ RESULTADO GLOBAL: TODO OK${NC}\n"
     else
-        echo -e "\n${B_RED}❌ RESULTADO GLOBAL: ALGUNOS TESTS FALLARON${NC}\n"
+        echo -e "${B_RED}❌ RESULTADO GLOBAL: ALGUNOS TESTS FALLARON${NC}\n"
     fi
 fi
