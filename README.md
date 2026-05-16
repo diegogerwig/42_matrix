@@ -118,9 +118,9 @@ Una combinación lineal es la expresión matemática construida al multiplicar u
 En este ejercicio se debe construir una función pura (que no modifica el estado original, sino que devuelve un nuevo `Vector`) para calcular la combinación lineal de un arreglo de vectores con sus respectivos coeficientes.
 
 ### 🧠 Lógica y Optimización (FMA)
-[cite_start]La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo [cite: 2532] [cite_start]y espacio[cite: 2533].
+La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo y espacio.
 
-A nivel de arquitectura de CPU, la operación matemática `(A * B) + C` ocurre con tanta frecuencia en cálculo matricial y gráficos que los procesadores modernos tienen una instrucción ensambladora dedicada para ejecutar ambas acciones en un único ciclo de reloj. Esto se conoce como **Fused Multiply-Accumulate (FMA)**. 
+A nivel de arquitectura de CPU, la operación matemática `(A * B) + C` ocurre con tanta frecuencia en cálculo matricial y gráficos que los procesadores modernos tienen una instrucción ensambladora dedicada para ejecutar ambas acciones en un único flop (ciclo de reloj). Esto se conoce como **Fused Multiply-Accumulate (FMA)**. 
 
 El uso de FMA no solo duplica teóricamente el rendimiento al reducir los pasos, sino que evita errores de redondeo de punto flotante al realizar la suma con precisión infinita internamente antes de truncar el resultado. Este proyecto detecta y utiliza nativamente `math.fma` aprovechando las bondades integradas en Python 3.13.
 
@@ -133,8 +133,15 @@ Vectores de entrada: V1 = [1.0, 2.0, 3.0]
 Coeficientes:        C1 = 10.0
                      C2 = -2.0
 -------------------------------------------------
-Cálculo interno:     (10 * V1) + (-2 * V2)
-Estado Final:        [10.0, 0.0, 230.0]
+1. Escalado (Totales Parciales):
+   C1 * V1 = 10.0 * [1.0, 2.0, 3.0]      ➔  [10.0, 20.0, 30.0]
+   C2 * V2 = -2.0 * [0.0, 10.0, -100.0]  ➔  [0.0, -20.0, 200.0]
+
+2. Suma de Componentes:
+   [ 10.0 + 0.0,  20.0 + (-20.0),  30.0 + 200.0 ]
+
+Estado Final Vector:
+   [10.0, 0.0, 230.0]
 ```
 
 ---

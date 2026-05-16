@@ -36,7 +36,7 @@ def linear_combination(u: list['Vector'], coefs: list[float]) -> 'Vector':
         for i in range(dim):
             if use_fma:
                 res_data[i] = math.fma(float(coef), float(vec.data[i]), res_data[i])
-            # else:
-            #     res_data[i] += coef * vec.data[i]
+            else:
+                res_data[i] += coef * vec.data[i]  # Hay versiones que no admiten FMA
                 
     return Vector(res_data)
