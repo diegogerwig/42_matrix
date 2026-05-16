@@ -21,7 +21,6 @@ Si deseas ejecutar las pruebas de un solo ejercicio de forma aislada con el ento
 
 ```bash
 python3 tests/test_ex00.py
-
 ```
 
 ### 3. Ejecución Manual del Código
@@ -43,6 +42,7 @@ u.add(v)
 print(u)
 # [7.0]
 # [10.0]
+```
 
 ---
 
