@@ -6,7 +6,7 @@
 
 Este proyecto utiliza un entorno automatizado gestionado con **`uv`** para garantizar una instalación ultrarrápida de las dependencias y una ejecución robusta de las pruebas en cualquier sistema (WSL, Linux 42, etc.).
 
-### 1. El Script Maestro: `setup.sh`
+### 1. Script MASTER: `setup.sh`
 El archivo `setup.sh` detecta automáticamente tu sistema operativo, inicializa el entorno de forma eficiente mediante `uv` e instala las dependencias de desarrollo necesarias.
 
 | Comando | Descripción |
