@@ -117,6 +117,8 @@ Una combinación lineal es la expresión matemática construida al multiplicar u
 
 En este ejercicio se debe construir una función pura (que no modifica el estado original, sino que devuelve un nuevo `Vector`) para calcular la combinación lineal de un arreglo de vectores con sus respectivos coeficientes.
 
+![](./doc/LinearCombination.png)
+
 ### 🧠 Lógica y Optimización (FMA)
 La función implementa verificaciones de consistencia dimensional $O(n)$ en tiempo y espacio.
 
@@ -153,6 +155,8 @@ Estado Final Vector:
 La interpolación lineal (abreviada históricamente en software como `lerp`) es una operación matemática fundamental para crear transiciones. Genera un valor exacto a medio camino entre un punto de inicio ($A$) y un punto final ($B$) basándose en un parámetro $t$, que actúa como un porcentaje (donde $0.0$ es el 0% y $1.0$ es el 100%).
 
 Esta operación es intensamente utilizada en renderizado 3D para transicionar colores, suavizar movimientos de cámara de un frame a otro o calcular trayectorias. El objetivo del ejercicio es construir la función `linear_interpolation` para que sea versátil y capaz de interpolar tanto números simples como colecciones enteras de números (Vectores y Matrices).
+
+![](./doc/LinearInterpolation.svg)
 
 ### 🧠 Lógica
 La interpolación lineal funciona como un **promedio ponderado** o una balanza entre dos valores. A medida que el porcentaje $t$ avanza de $0.0$ a $1.0$, el peso o la influencia del punto inicial ($u$) disminuye, mientras que la del punto final ($v$) aumenta de forma inversamente proporcional.
@@ -193,3 +197,32 @@ Resultado Vector: [2.6, 1.3]
 
 ---
 ---
+
+## EX03 - Dot Product
+
+### 💡 Descripción
+El producto escalar (o *dot product*, representado a menudo como $u \cdot v$ o $\langle u|v \rangle$) es una de las operaciones más críticas del álgebra lineal. Toma dos vectores de la misma dimensión y los "comprime", devolviendo un **único número escalar** (no un vector). 
+
+Geométricamente, el producto escalar es una medida de correlación direccional: nos indica qué tan alineados están dos vectores. Si el resultado es `0`, significa que los vectores son perfectamente perpendiculares entre sí. Es la pieza clave para calcular proyecciones ortogonales y resolver multiplicaciones matriciales.
+
+### 🧠 Lógica y Optimización
+Para calcularlo, se multiplican las componentes homólogas de ambos vectores (X con X, Y con Y, etc.) y se suman todos esos productos parciales en un único acumulador escalar.
+
+Al igual que en combinaciones lineales, aprovechamos la instrucción nativa Fused Multiply-Add (`math.fma`) para realizar la operación de multiplicar y acumular cada componente de forma atómica a nivel de procesador, garantizando máxima velocidad y esquivando el truncamiento del error de punto flotante.
+
+La complejidad algorítmica lograda es:
+* **Tiempo: $O(n)$** ya que se recorren los $n$ elementos homólogos en un único bucle.
+* **Espacio: $O(1)$** dado que el resultado es simplemente un número primitivo (`float`), evitando instanciar nuevas estructuras iterables en memoria.
+
+### 📊 Ejemplo de Flujo de Datos
+
+```text
+Vectores: u = [4.0, 2.0]
+          v = [2.0, 1.0]
+-------------------------------------------------
+Cálculo: (u_x * v_x) + (u_y * v_y)
+Desarrollo FMA: (4.0 * 2.0) + (2.0 * 1.0)
+Acumulador: 8.0 + 2.0
+
+Resultado Escalar: 10.0
+```
