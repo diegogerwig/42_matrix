@@ -301,11 +301,15 @@ Norma Suprema (Inf): max(|-4.0|, |-2.0|) = 4.0
 ## EX05 - Cosine
 
 ### 💡 Descripción
-El coseno del ángulo que forman dos vectores es la medida definitiva de "similitud direccional" (*Cosine Similarity* en Machine Learning). A diferencia del producto escalar bruto (que puede escalar infinitamente dependiendo de las magnitudes de los vectores), el coseno normaliza el resultado forzándolo a estar en un rango estricto entre `[-1.0, 1.0]`.
+El coseno del ángulo que forman dos vectores es la medida definitiva de "similitud direccional" (*Cosine Similarity*). A diferencia del producto escalar bruto (que puede escalar infinitamente dependiendo de las magnitudes de los vectores), el coseno normaliza el resultado forzándolo a estar en un rango estricto entre `[-1.0, 1.0]`.
 
 * **`1.0`**: Los vectores apuntan exactamente en la misma dirección (ángulo 0°).
 * **`0.0`**: Los vectores son perfectamente ortogonales (ángulo 90°).
 * **`-1.0`**: Los vectores apuntan en direcciones exactamente opuestas (ángulo 180°).
+
+<p align="center">
+  <img src="./doc/Cosine_Similarity.png" width="80%" alt="Cosine Similarity">
+</p>
 
 ### 🧠 Lógica
 Para calcular este factor, dividimos el producto escalar de los dos vectores por la multiplicación de sus respectivas Normas Euclidianas (L2).
@@ -323,10 +327,10 @@ Vectores: u = [8.0, 7.0]
           v = [3.0, 2.0]
 -------------------------------------------------
 1. Producto Escalar (u·v): 24.0 + 14.0 = 38.0
-2. Norma de u (||u||): sqrt(64.0 + 49.0) ≈ 10.6301458
-3. Norma de v (||v||): sqrt(9.0 + 4.0) ≈ 3.6055512
+2. Norma Euclidiana de u (||u||): sqrt(64.0 + 49.0) ≈ 10.6301458
+3. Norma Euclidiena de v (||v||): sqrt(9.0 + 4.0) ≈ 3.6055512
 
-Cálculo Final: 38.0 / (10.6301458 * 3.6055512)
+Operaciones: 38.0 / (10.6301458 * 3.6055512)
 Resultado: 0.991454296 (Vectores muy alineados, casi 1.0)
 ```
 
