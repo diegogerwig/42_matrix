@@ -180,9 +180,10 @@ else
                 echo -e "\n${B_CYAN}╭────────────────────────────────────────────────────────╮${NC}"
                 echo -e "${B_CYAN}│ ⌛ ESPERANDO CONFIRMACIÓN...                           │${NC}"
                 echo -e "${B_CYAN}╰────────────────────────────────────────────────────────╯${NC}"
-                echo -e "${B_YELLOW} ↳ Presiona [ENTER] para avanzar al siguiente test.${NC}"
-                echo -e "${B_YELLOW} ↳ Escribe '${B_GREEN}python3${B_YELLOW}' para abrir la consola interactiva y probar tus clases.${NC}"
-                echo -e "${B_YELLOW} ↳ O escribe un comando de terminal (ej: ls, cat).${NC}\n"
+                echo -e "${B_YELLOW} ↳ OPCIONES:${NC}"
+                echo -e "${B_YELLOW} ↳   1. Presiona [ENTER] para avanzar al siguiente test.${NC}"
+                echo -e "${B_YELLOW} ↳   2. Escribe '${B_GREEN}python3${B_YELLOW}' para abrir la consola interactiva y probar tus clases.${NC}"
+                echo -e "${B_YELLOW} ↳   3. Escribe un comando de terminal (ej: ls, cat).${NC}\n"
                 
                 echo -ne "${B_GREEN} > ${NC}"
                 read -r user_input
