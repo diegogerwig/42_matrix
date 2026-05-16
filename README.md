@@ -308,7 +308,7 @@ El coseno del ángulo que forman dos vectores es la medida definitiva de "simili
 * **`-1.0`**: Los vectores apuntan en direcciones exactamente opuestas (ángulo 180°).
 
 <p align="center">
-  <img src="./doc/Cosine_Similarity.png" width="80%" alt="Cosine Similarity">
+  <img src="./doc/Cosine_Similarity.png" width="60%" alt="Cosine Similarity">
 </p>
 
 ### 🧠 Lógica
@@ -347,7 +347,7 @@ La característica fundamental de este nuevo vector es que es **ortogonal (perpe
 La dirección del vector resultante se rige por la **Regla de la Mano Derecha**: si alineas tus dedos índice y corazón con los vectores $u$ y $v$, tu pulgar apuntará en la dirección del vector resultante.
 
 <p align="center">
-  <img src="./doc/Croos_Product.jpeg" width="80%" alt="Cosine Similarity">
+  <img src="./doc/Cross_Product.jpeg" width="60%" alt="Cross Product">
 </p>
 
 ### 🧠 Lógica
@@ -371,3 +371,54 @@ c_z = (1.0 * 1.0) - (0.0 * 0.0) =  1.0
 
 Resultado: [0.0, 0.0, 1.0] (El Eje Z exacto)
 ```
+
+---
+---
+
+## EX07 - Linear Map & Matrix Multiplication
+
+### 💡 Descripción
+La multiplicación de matrices es la piedra angular de todo el álgebra lineal aplicada. A diferencia de las multiplicaciones tradicionales, la operación entre una Matriz $A$ y una Matriz $B$ (o un Vector $v$) consiste en calcular el producto escalar entre las filas de $A$ y las columnas de $B$.
+
+Físicamente, **una matriz multiplicando a un vector es una Transformación Lineal**. La matriz actúa como una función matemática que "mapea" el espacio bidimensional o tridimensional original, provocando rotaciones, deformaciones o escalados al vector sin necesidad de utilizar senos o cosenos engorrosos por cada vértice.
+
+<p align="center">
+  <img src="./doc/Matrix_Multiplication.png" width="90%" alt="Matrix Multiplication">
+</p>
+
+### 🧠 Lógica
+El algoritmo comprueba primero la regla fundamental del producto: el número de columnas de la Matriz A debe coincidir exactamente con el número de filas (o dimensiones) del objetivo B. 
+
+Para realizar la operación en tiempo $O(n^3)$ y espacio $O(n^2)$, hemos implementado una técnica de bajo nivel vital en librerías profesionales como NumPy: en el triple bucle `for` de la matriz, la iteración no ocurre en el orden natural `i, j, k`, sino en `i, k, j`. 
+Al fijar los saltos de memoria para leer secuencialmente el interior de los arrays en el lenguaje, se reducen drásticamente los *Cache Misses* en las memorias L1/L2 del procesador, aumentando considerablemente la eficiencia al acompañarse del `math.fma` nativo.
+
+### 📊 Ejemplo de Flujo de Datos
+
+```text
+Matriz U (2x2)       Matriz V (2x2)
+[ 3.0, -5.0 ]    x   [ 2.0,  1.0 ]
+[ 6.0,  8.0 ]        [ 4.0,  2.0 ]
+-------------------------------------------------
+Cálculos (Fila de U * Columna de V):
+Pos (0,0) = (3 * 2) + (-5 * 4) =  6 - 20 = -14
+Pos (0,1) = (3 * 1) + (-5 * 2) =  3 - 10 =  -7
+Pos (1,0) = (6 * 2) + ( 8 * 4) = 12 + 32 =  44
+Pos (1,1) = (6 * 1) + ( 8 * 2) =  6 + 16 =  22
+
+Resultado Matriz: 
+[ -14.0,  -7.0 ]
+[  44.0,  22.0 ]
+```
+
+### 🧭 Un explorador interactivo
+Para ayudarte a interiorizar la magia de las transformaciones lineales antes de tu evaluación. Aquí tienes un simulador de la primera fase: multiplicar una Matriz `2x2` por un Vector de `2` dimensiones. 
+
+Puedes configurar la Matriz (que actuará como una máquina de alteración del espacio) y probar diferentes Vectores. Te he dejado cargados los valores del test que escala un vector por el doble (`[2.0, 1.0]` con matriz de `[2, 0], [0, 2]`), pero intenta cambiar la matriz a `[0, -1], [1, 0]` para ver cómo el vector es "mágicamente" rotado 90 grados:
+
+```json?chameleon
+{"component":"LlmGeneratedComponent","props":{"height":"700px","prompt":"Create an interactive Linear Transformation visualizer. Objective: Demonstrate how a 2x2 Matrix acts as a transformation function on a 2D Vector. Data State: initialValues { m00: 2, m01: 0, m10: 0, m11: 2, vx: 2, vy: 1 }. Strategy: Standard Layout. Inputs: 4 number inputs for the 2x2 Transformation Matrix (m00, m01, m10, m11) and 2 sliders for the input Vector (vx, vy, range -5 to +5). Behavior: 1. Draw a fixed 2D coordinate grid. 2. Plot the original Input Vector (vx, vy) as a grey dashed arrow. 3. Dynamically calculate the Transformed Vector by multiplying the Matrix by the Vector. Plot this new Transformed Vector as a solid, brightly colored arrow. 4. Display the live mathematical matrix-multiplication breakdown below the canvas showing exactly how the dot products of the rows and columns yield the new vector coordinates. Use Spanish for all text and UI elements.","id":"im_368fb4e8f110ebe2"}}
+```
+
+---
+---
+
