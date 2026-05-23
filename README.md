@@ -510,23 +510,45 @@ Al utilizar el FMA (`math.fma`) en la fase de eliminación, minimizamos el ruido
 **Resolviendo un sistema de ecuaciones matricial**
 
 **Sistema de Ecuaciones:**
+
 $$2x + 4y = 10$$
+
 $$3x + y = 5$$
 
 **Matriz Original (2x3):**
 ```text
 Fila 0: [ 2.0,  4.0, 10.0 ]
 Fila 1: [ 3.0,  1.0,  5.0 ]
-🎯 Columna 0: Aislar la primera variable ($x$)Paso 1: Crear el "Pivote" (El 1)Dividimos toda la Fila 0 entre 2.0 para que su primer elemento sea exactamente un 1.Operación: [ 2.0/2, 4.0/2, 10.0/2 ]Nueva Fila 0: [ 1.0, 2.0, 5.0 ] (Equivale a $1x + 2y = 5$)Paso 2: Eliminar el resto (Hacer el 0)Para que el 3.0 de la Fila 1 desaparezca, le restamos 3 veces nuestra nueva Fila 0.Operación: Fila 1 = Fila 1 - (3 * Fila 0)Nueva Fila 1: [ 0.0, -5.0, -10.0 ] (Equivale a $0x - 5y = -10$)
 
-🎯 Columna 1: Aislar la segunda variable ($y$)Paso 3: Crear el nuevo "Pivote" (El 1)Saltamos a la segunda columna. Dividimos toda la Fila 1 entre -5.0 para que su componente central sea un 1.Operación: [ 0.0/-5, -5.0/-5, -10.0/-5 ]Nueva Fila 1: [ 0.0, 1.0, 2.0 ] (Equivale a $1y = 2$)Paso 4: Eliminar el resto (Hacer el 0)Para eliminar el 2.0 que aún queda molestando en la Fila 0, le restamos 2 veces nuestra recién creada Fila 1.Operación: Fila 0 = Fila 0 - (2 * Fila 1)Nueva Fila 0: [ 1.0, 0.0, 1.0 ] (Equivale a $1x = 1$)
+🎯 Columna 0: Aislar la primera variable ($x$)
 
-🏁 Resultado Final (Matriz Escalonada Reducida)La parte izquierda de la matriz se ha convertido en una Matriz Identidad perfecta, aislando los valores en la última columna.Plaintext[ 1.0, 0.0, 1.0 ]
+Paso 1: Crear el "Pivote"
+Dividimos toda la Fila 0 entre 2.0 para que su primer elemento sea exactamente un 1.
+Operación: [ 2.0/2, 4.0/2, 10.0/2 ]Nueva Fila 0: [ 1.0, 2.0, 5.0 ] (Equivale a $1x + 2y = 5$)
+
+Paso 2: Eliminar el resto (Hacer el 0)
+Para que el 3.0 de la Fila 1 desaparezca, le restamos 3 veces nuestra nueva Fila 0.
+Operación: Fila 1 = Fila 1 - (3 * Fila 0)Nueva Fila 1: [ 0.0, -5.0, -10.0 ] (Equivale a $0x - 5y = -10$)
+
+🎯 Columna 1: Aislar la segunda variable ($y$)
+
+Paso 3: Crear el nuevo "Pivote"
+Saltamos a la segunda columna. Dividimos toda la Fila 1 entre -5.0 para que su componente central sea un 1.
+Operación: [ 0.0/-5, -5.0/-5, -10.0/-5 ]Nueva Fila 1: [ 0.0, 1.0, 2.0 ] (Equivale a $1y = 2$)
+
+Paso 4: Eliminar el resto (Hacer el 0)
+Para eliminar el 2.0 que aún queda molestando en la Fila 0, le restamos 2 veces nuestra recién creada Fila 1.
+Operación: Fila 0 = Fila 0 - (2 * Fila 1)Nueva Fila 0: [ 1.0, 0.0, 1.0 ] (Equivale a $1x = 1$)
+
+🏁 Resultado Final (Matriz Escalonada Reducida)La parte izquierda de la matriz se ha convertido en una Matriz Identidad perfecta, aislando los valores en la última columna.
+[ 1.0, 0.0, 1.0 ]
 [ 0.0, 1.0, 2.0 ]
 ```
 
 Al leer el resultado de forma lineal, la matriz nos da la solución directa del sistema de ecuaciones:
+
 $1x + 0y = 1 \rightarrow \mathbf{x = 1}$
+
 $0x + 1y = 2 \rightarrow \mathbf{y = 2}$
 
 ---
