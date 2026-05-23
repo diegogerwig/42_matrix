@@ -29,7 +29,7 @@ def run():
     ]
 
     def custom_desc(m):
-        return f"Matrix({m}).row_echelon()"
+        return f"Matrix({m}).row_echelon()\n  ↳ Resultado"
 
     run_cases(10, wrapper_row_echelon, cases, custom_desc_func=custom_desc)
 
