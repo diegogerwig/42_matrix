@@ -698,38 +698,125 @@ Resultado Rango: 2 (El sistema tenía 3 ecuaciones, pero solo 2 aportaban inform
 ---
 ---
 
-## EX14 - Projection Matrix (Bonus)
+## EX14 - Projection Matrix
 
-### 💡 Descripción
+### 💡 Descripción 
+
 La **Matriz de Proyección** es el núcleo matemático de cualquier motor de gráficos 3D (como OpenGL, Vulkan, DirectX o motores como Unity y Unreal). 
+
+La **Matriz de Proyección** crea un tronco de pirámide visual (conocido como *Frustum*) que define qué porción del mundo 3D puede ver la cámara, y deforma ese espacio para simular la perspectiva humana (haciendo que los objetos lejanos parezcan más pequeños).
 
 Las pantallas de nuestros ordenadores son planas (2D), pero los mundos virtuales tienen profundidad (3D). La Matriz de Proyección es una matriz especial de $4 \times 4$ que coge las coordenadas 3D de un objeto y las "aplasta" matemáticamente contra la pantalla, simulando la **perspectiva humana** (las cosas lejanas se ven más pequeñas).
 
-### 🧠 Lógica y Geometría
-Para lograr esta ilusión óptica, la matriz necesita 4 parámetros:
-1. **FOV (Field of View):** El campo de visión. Un ángulo grande (ej: 120°) simula una lente de "ojo de pez", encogiendo todo para que quepa en pantalla.
-2. **Ratio (Aspect Ratio):** La proporción de tu monitor (ej: `16/9` o `1920/1080`). Se usa para que los objetos no se vean achatados si la pantalla es rectangular.
-3. **Near / Far Clipping Planes:** Las distancias mínimas y máximas que la cámara puede "ver". Cualquier objeto más cerca de `near` o más lejos de `far` no se dibujará para ahorrar memoria.
+1. **FOV (Field of View - Campo de Visión):**
+   * **100 grados:** Un FOV alto simula un "ojo de pez" o lente gran angular. Abarca muchísimo espacio periférico, pero hace que los objetos centrales se vean muy lejanos.
+   * **40 grados:** Un FOV bajo simula un "teleobjetivo" o francotirador. Reduce el ángulo de visión, generando un efecto de **zoom** donde los objetos se ven mucho más grandes y cercanos.
+   * *(Nota: La función espera el valor en radianes, por lo que 90° debe pasarse como `1.5708` o `PI/2`).*
 
-La matriz resultante mapea el espacio de visión (un tronco de pirámide o *frustum*) en un cubo perfecto tridimensional (Normalized Device Coordinates o NDC), cuyos valores van de `-1.0` a `1.0`.
+2. **Ratio (Relación de Aspecto):**
+   * Es la relación entre el ancho y el alto de la pantalla ($ancho / alto$).
+   * Si tienes una ventana panorámica (16:9) pero pasas un `ratio = 1` (cuadrado), la imagen se **distorsionará**, viéndose estirada horizontalmente. El parámetro `ratio` aplica una fuerza contraria en el eje X para que los objetos mantengan sus proporciones correctas independientemente de la forma de la ventana.
 
-### 📊 Ejemplo de Matriz Resultante
+3. **Near & Far (Planos de Recorte):**
+   * Son dos "muros invisibles" de rendimiento. 
+   * **Near:** Distancia mínima a la cámara. Si un objeto atraviesa este plano acercándose demasiado a ti, desaparecerá instantáneamente de la pantalla (evitando que los polígonos atraviesen el "ojo" de la cámara).
+   * **Far:** Distancia máxima de dibujado. Cualquier objeto que supere esta distancia no se renderizará (para ahorrar recursos de la tarjeta gráfica).
+
+### 🧠 Lógica
+
+La matriz de proyección en perspectiva es una matriz $4 \times 4$ que opera sobre vectores homogéneos $4D$ $[X, Y, Z, W]$. El evaluador te pedirá que expliques la estructura matemática resultante. 
+
+Asumiendo que $f = \frac{1}{\tan(FOV / 2)}$, esta es la anatomía de la matriz:
+
+```text
+[ f/ratio,    0.0,            0.0,                    0.0          ]
+[   0.0,       f,             0.0,                    0.0          ]
+[   0.0,      0.0,   -(far + near)/(far - near), -(2*far*near)/(far - near) ]
+[   0.0,      0.0,           -1.0,                    0.0          ]
+
+```
+
+#### 1. Componentes X e Y (El tamaño en pantalla)
+
+* **`M[1][1] = f` (Escala Vertical):** Multiplica las coordenadas $Y$. Si el FOV es grande, la tangente es grande, por lo que $f$ se vuelve pequeño. Al multiplicar por un número pequeño, las coordenadas se encogen para que quepan más cosas en la pantalla.
+* **`M[0][0] = f / ratio` (Escala Horizontal):** Hace exactamente lo mismo que el componente Y, pero modificado por la relación de aspecto de tu pantalla para contrarrestar la distorsión rectangular.
+
+#### 2. Componentes Z (El remapeo de profundidad)
+
+* **`M[2][2]` y `M[2][3]` (Normalización Z):** Estos dos valores trabajan juntos matemáticamente para coger las profundidades originales del mundo (que pueden ir, por ejemplo, de $0.1$ a $1000.0$) y aplastarlas de forma no-lineal en un rango estricto entre `-1.0` y `1.0`. Su naturaleza logarítmica otorga mucha precisión a los objetos cercanos y poca a los lejanos (por eso a lo lejos ocurren a veces parpadeos gráficos conocidos como *Z-fighting*).
+
+#### 3. El Componente W (La Magia de la Perspectiva)
+
+* **`M[3][2] = -1.0`:** ¡Este es el componente más importante de todos! Al multiplicar la matriz, este `-1` toma el valor $Z$ (la profundidad original del objeto) y lo copia directamente en el componente invisible $W$ del vector resultante ($W = -Z$).
+* *¿Por qué?* Porque el motor gráfico, al final del proceso, divide automáticamente las posiciones $X$ e $Y$ entre el componente $W$. Como $W$ ahora contiene la distancia, **los objetos con mayor distancia sufren una división mucho mayor**, haciéndose cada vez más pequeños en la pantalla. Así nace la perspectiva real.
+
+### 📊 Ejemplo
 
 ```text
 Configuración:
 FOV = 90° (π/2 radianes)
-Ratio = 16:9
+Ratio = 16:9    
 Near = 0.1
 Far = 1000.0
 -------------------------------------------------
-Matriz de Proyección 4x4 Generada:
+Matriz de Proyección 4x4 Generada:  
 
 [ 0.5625,   0.0,       0.0,       0.0   ]  <- Ajuste horizontal (Ratio)
 [ 0.0,      1.0,       0.0,       0.0   ]  <- Ajuste vertical (FOV)
 [ 0.0,      0.0,      -1.0002,   -0.200 ]  <- Compresión de la profundidad (Z)
 [ 0.0,      0.0,      -1.0,       0.0   ]  <- Guardado de W para perspectiva
+```   
+
+---
+---
+
+## EX15 - Complex Vector Spaces (Bonus)
+
+### 💡 Descripción
+Los espacios vectoriales no están limitados a los números reales ($\mathbb{R}$). En disciplinas muy avanzadas como la **Mecánica Cuántica**, el procesamiento de señales (Transformada de Fourier) o la simulación electromagnética, los espacios vectoriales se construyen sobre el cuerpo de los números complejos ($\mathbb{C}$).
+
+En Python, el número imaginario $i$ (donde $i^2 = -1$) se representa con la letra `j` (ej: `3 + 2j`). Gracias a la tipificación dinámica, operaciones previas como la suma o la multiplicación matricial ya soportan este flujo matemático de forma nativa.
+
+### 🧠 Lógica
+
+Para que la geometría mantenga su consistencia en el plano complejo, se deben modificar dos conceptos clave:
+
+**1. El Producto Escalar Hermitiano:**
+Si hiciéramos el producto escalar normal de un vector consigo mismo para sacar su distancia, podríamos obtener una magnitud negativa o imaginaria (algo físicamente imposible). Por ello, el producto interno complejo aplica el **Conjugado Complejo** ($\overline{z} = a - bi$) al primer vector:
+$$u \cdot v = \sum_{i=1}^{n} \overline{u_i} \times v_i$$
+
+**2. La Transpuesta Conjugada (Adjunta):**
+La transposición tradicional pierde sus propiedades geométricas de simetría en el espacio complejo. La verdadera generalización de la matriz transpuesta ($A^T$) es la **Transpuesta Conjugada** ($A^*$), que además de intercambiar filas por columnas, invierte el signo de la parte imaginaria de todos los elementos:
+$$(A^*)_{i,j} = \overline{A_{j,i}}$$
+
+### 📊 Ejemplo
+
+**Transpuesta Conjugada de Matriz 2x2:**
+```text
+Matriz Original:
+[ 1 + 2i,  3 - 4i ]
+[ 5 + 6i,  7 - 8i ]
+-------------------------------------------------
+Paso 1: Transposición (Filas a Columnas)
+[ 1 + 2i,  5 + 6i ]
+[ 3 - 4i,  7 - 8i ]
+
+Paso 2: Conjugación (Invertir el signo imaginario)
+[ 1 - 2i,  5 - 6i ]
+[ 3 + 4i,  7 + 8i ]  <- Resultado Final
 ```
 
----
----
+**Producto Escalar Hermitiano entre dos vectores complejos:**
+```textVectores:
+u = [ 1 + 2i, 3 - 4i ]
+v = [ 5 + 6i, 7 - 8i ]
+-------------------------------------------------
+Paso 1: Conjugado Complejo de u
+u_conjugado = [ 1 - 2i, 3 + 4i ]  <- Invertimos el signo de la parte imaginaria 
 
+Paso 2: Producto Escalar Hermitiano
+u · v = (1 - 2i)(5 + 6i) + (3 + 4i)(7 - 8i)
+       = (5 + 6i - 10i - 12i^2) + (21 - 24i + 28i - 32i^2)
+       = (5 - 4i + 12) + (21 + 4i + 32)
+       = 17 + 0i  <- Resultado Final (Número Real)
+```

@@ -274,6 +274,24 @@ class Matrix:
                 non_zero_rows += 1
                 
         return non_zero_rows
+    
+    def conjugate_transpose(self) -> 'Matrix':
+        """
+        Calcula la transpuesta conjugada (Matriz Adjunta/Hermítica).
+        Intercambia filas por columnas y cambia el signo de la parte imaginaria.
+        """
+        m, n = self.shape
+        res_data = [[0.0] * m for _ in range(n)]
+        
+        for i in range(m):
+            for j in range(n):
+                val = self.data[i][j]
+                if isinstance(val, complex):
+                    res_data[j][i] = val.conjugate()
+                else:
+                    res_data[j][i] = float(val)
+                    
+        return Matrix(res_data)
 
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])

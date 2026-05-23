@@ -19,10 +19,17 @@ def dot(u: 'Vector', v: 'Vector') -> float:
     result = 0.0
     use_fma = hasattr(math, 'fma')
     
-    for u_i, v_i in zip(u.data, v.data):
-        if use_fma:
-            result = math.fma(float(u_i), float(v_i), result)
+    for i in range(len(u.data)):
+        val_u = u.data[i]
+        val_v = v.data[i]
+        
+        if isinstance(val_u, complex):
+            val_u = val_u.conjugate()
+            result += val_u * val_v
         else:
-            result += float(u_i) * float(v_i)
+            if use_fma:
+                result = math.fma(float(val_u), float(val_v), result)
+            else:
+                result += float(val_u) * float(val_v)
             
     return result
