@@ -112,5 +112,52 @@ class Matrix:
                 
         return Matrix(res_data)
 
+    def row_echelon(self) -> 'Matrix':
+        """
+        Calcula la Forma Escalonada Reducida por Filas (RREF) mediante Gauss-Jordan.
+        Complejidad temporal: O(n^3) 
+        Complejidad espacial: O(n^2)
+        """
+        m, n = self.shape
+        data = [[float(val) for val in row] for row in self.data]
+        use_fma = hasattr(math, 'fma')
+        
+        r = 0
+        for c in range(n):
+            if r >= m:
+                break
+                
+            pivot_row = r
+            max_val = abs(data[r][c])
+            for i in range(r + 1, m):
+                if abs(data[i][c]) > max_val:
+                    max_val = abs(data[i][c])
+                    pivot_row = i
+                    
+            if max_val < 1e-7:
+                for i in range(r, m):
+                    data[i][c] = 0.0
+                continue
+                
+            if pivot_row != r:
+                data[r], data[pivot_row] = data[pivot_row], data[r]
+                
+            pivot_val = data[r][c]
+            for j in range(c, n):
+                data[r][j] /= pivot_val
+                
+            for i in range(m):
+                if i != r:
+                    factor = data[i][c]
+                    for j in range(c, n):
+                        if use_fma:
+                            data[i][j] = math.fma(-factor, data[r][j], data[i][j])
+                        else:
+                            data[i][j] -= factor * data[r][j]
+                            
+            r += 1
+            
+        return Matrix(data)
+
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])

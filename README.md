@@ -459,7 +459,7 @@ Resultado: 9.0
 ### 💡 Descripción
 La **Transposición** es una operación que devuelve una nueva matriz reflejada sobre su diagonal principal. Geométricamente, el efecto es el intercambio de las filas por las columnas. 
 
-Esta operación no altera la información de la matriz, simplemente reorganiza su estructura. Es increíblemente útil en matemáticas gráficas y machine learning, ya que a menudo necesitamos transponer vectores columna en vectores fila (o viceversa) para cumplir con las reglas de compatibilidad dimensional de la multiplicación de matrices (que programamos en el EX07).
+Esta operación no altera la información de la matriz, simplemente reorganiza su estructura. Es increíblemente útil en matemáticas gráficas y machine learning, ya que a menudo necesitamos transponer vectores columna en vectores fila (o viceversa) para cumplir con las reglas de compatibilidad dimensional de la multiplicación de matrices.
 
 ### 🧠 Lógica
 Matemáticamente, la matriz transpuesta $A^T$ de una matriz $A$ de dimensiones $m \times n$ se define elemento a elemento como:
@@ -485,6 +485,51 @@ Fila 2 [5, 6] se convierte en Columna 2
 Resultado Matriz Transpuesta (2x3):
 [ 1.0,  3.0,  5.0 ]
 [ 2.0,  4.0,  6.0 ]
+```
+
+---
+---
+
+## EX10 - Row-Echelon Form
+
+### 💡 Descripción
+La forma escalonada reducida por filas (RREF) es el resultado de aplicar el **Algoritmo de Eliminación de Gauss-Jordan**. El objetivo geométrico y algebraico de este algoritmo es simplificar una matriz lo máximo posible operando con sus filas para revelar la "esencia" o estructura más pura del espacio vectorial que representa.
+
+Es la herramienta definitiva del álgebra lineal para resolver sistemas de ecuaciones, encontrar la inversa de una matriz y descubrir cuántas dimensiones reales tiene un sistema (rango).
+
+### 🧠 Lógica
+Para llevar una matriz a su forma RREF, seguimos estos pasos de manera iterativa por cada columna:
+1. **Buscar el Pivote:** Buscamos el valor absoluto más grande en la columna actual. Intercambiamos esa fila con la superior para asegurar la máxima estabilidad numérica y evitar divisiones por cero.
+2. **Escalar:** Dividimos toda esa fila por el valor del pivote para que el coeficiente principal (el primer número no nulo) sea un `1` exacto.
+3. **Eliminar:** Restamos múltiplos de esa fila al resto de filas de la matriz (tanto las de abajo como las de arriba) para que todas las demás entradas de esa columna se conviertan en `0`.
+
+Al utilizar el FMA (`math.fma`) en la fase de eliminación, minimizamos el ruido de punto flotante que suele arrastrarse en operaciones de $O(n^3)$.
+
+### 📊 Ejemplo
+
+**Resolviendo un sistema de ecuaciones matricial**
+```text
+Matriz Original:
+[ -7.0,  2.0 ]
+[  4.0,  8.0 ]
+-------------------------------------------------
+Paso 1: Columna 0. El pivote (-7) está en la fila 0. 
+        Escalamos la fila 0 dividiendo por -7:
+        Fila 0 = [ 1.0, -0.2857 ]
+
+Paso 2: Eliminamos la columna 0 en la fila 1 (restando 4 * Fila 0):
+        Fila 1 = [ 0.0,  9.1428 ]
+
+Paso 3: Columna 1. El pivote (9.1428) está en la fila 1.
+        Escalamos la fila 1:
+        Fila 1 = [ 0.0, 1.0 ]
+
+Paso 4: Eliminamos la columna 1 en la fila 0 (restando -0.2857 * Fila 1):
+        Fila 0 = [ 1.0, 0.0 ]
+
+Matriz Escalonada Reducida Resultante:
+[ 1.0,  0.0 ]
+[ 0.0,  1.0 ]  (Una Matriz Identidad perfecta)
 ```
 
 ---
