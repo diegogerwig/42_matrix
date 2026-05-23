@@ -19,14 +19,22 @@ def print_header(ex_nb, title):
 
 def print_result(description, result, expected):
     is_correct = result == expected
-
-    if is_correct:
-        status = f"[{GREEN} OK {NC}]"
-    else:
-        status = f"[{RED}FAIL{NC}]"
-
+    status = f"[{GREEN} OK {NC}]" if is_correct else f"[{RED}FAIL{NC}]"
+    
     content = f"{description}: {result}"
-    print(f" {YELLOW}•{NC} {content:<{PAD_LENGTH}} {status}")
+    lines = content.split('\n')
+
+    for i, line in enumerate(lines):
+        if i == len(lines) - 1:
+            if len(lines) == 1:
+                print(f" {YELLOW}•{NC} {line:<{PAD_LENGTH}} {status}")
+            else:
+                print(f"{line:<{PAD_LENGTH + 3}} {status}")
+        else:
+            if i == 0:
+                print(f" {YELLOW}•{NC} {line}")
+            else:
+                print(f"{line}")
 
     return is_correct
 
@@ -61,7 +69,6 @@ def run_cases(ex_num: int, funcion_a_testear, casos: list, custom_desc_func=None
     all_ok = True
 
     for inputs, expected in casos:
-        # Forzamos que inputs sea una tupla para poder usar *args
         args = inputs if isinstance(inputs, tuple) else (inputs,)
 
         if custom_desc_func:
