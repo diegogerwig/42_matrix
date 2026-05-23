@@ -208,5 +208,56 @@ class Matrix:
                         
         return det
 
+    def inverse(self) -> 'Matrix':
+        """
+        Calcula la matriz inversa mediante el método de Gauss-Jordan con matriz aumentada.
+        Complejidad temporal: O(n^3)
+        Complejidad espacial: O(n^2)
+        """
+        if self.shape[0] != self.shape[1]:
+            raise ValueError("Solo las matrices cuadradas pueden tener inversa.")
+            
+        n = self.shape[0]
+        if n == 0:
+            return Matrix([])
+            
+        if abs(self.determinant()) < 1e-7:
+            raise ValueError("La matriz es singular (determinante 0) y no puede invertirse.")
+            
+        aug = []
+        for i in range(n):
+            row = [float(self.data[i][j]) for j in range(n)] + [1.0 if i == j else 0.0 for j in range(n)]
+            aug.append(row)
+            
+        use_fma = hasattr(math, 'fma')
+        
+        for c in range(n):
+            pivot_row = c
+            max_val = abs(aug[c][c])
+            for i in range(c + 1, n):
+                if abs(aug[i][c]) > max_val:
+                    max_val = abs(aug[i][c])
+                    pivot_row = i
+                    
+            if pivot_row != c:
+                aug[c], aug[pivot_row] = aug[pivot_row], aug[c]
+                
+            pivot_val = aug[c][c]
+            for j in range(c, 2 * n):
+                aug[c][j] /= pivot_val
+                
+            for i in range(n):
+                if i != c:
+                    factor = aug[i][c]
+                    for j in range(c, 2 * n):
+                        if use_fma:
+                            aug[i][j] = math.fma(-factor, aug[c][j], aug[i][j])
+                        else:
+                            aug[i][j] -= factor * aug[c][j]
+                            
+        res_data = [[aug[i][j] for j in range(n, 2 * n)] for i in range(n)]
+        
+        return Matrix(res_data)
+
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])

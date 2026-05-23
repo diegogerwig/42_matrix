@@ -611,3 +611,51 @@ Resultado: -62.0 (El espacio se invierte y aumenta su tamaño x62)
 ---
 ---
 
+## EX12 - Inverse
+
+### 💡 Descripción
+La matriz inversa ($A^{-1}$) de una transformación $A$ es aquella que deshace el efecto original. Al multiplicar una matriz por su inversa, el resultado siempre es la **Matriz Identidad** (el estado neutro del espacio). 
+Es la base conceptual para resolver cualquier ecuación matricial de la forma $A \times X = B$ mediante $X = A^{-1} \times B$.
+
+*Regla Inquebrantable:* No todas las matrices tienen inversa. Si el determinante de la matriz es $0$, significa que la transformación colapsó el espacio (perdiendo una o varias dimensiones). Físicamente, es imposible recuperar un espacio 3D a partir de su sombra plana 2D. Esta clase de matrices se denominan **singulares**.
+
+### 🧠 Lógica
+La forma más eficiente y numéricamente estable de calcular la inversa de una computadora consiste en resolver múltiples sistemas de ecuaciones simultáneos utilizando el algoritmo de Gauss-Jordan sobre una **Matriz Aumentada**.
+
+1. Se toma la matriz original $A$ y se le adjunta una matriz identidad $I$ del mismo tamaño a su derecha, creando una super-matriz rectangular $[ A | I ]$.
+2. Se aplican las operaciones de fila (pivoteo, escalado y eliminación) a **toda la fila aumentada**.
+3. El objetivo es convertir el lado izquierdo ($A$) en una Matriz Identidad.
+4. Cuando el lado izquierdo se convierte en $I$, las operaciones aritméticas que se "filtraron" al lado derecho han transformado la Identidad inicial en la matriz inversa exacta $[ I | A^{-1} ]$.
+
+### 📊 Ejemplo
+
+**Inversión de una Matriz 2x2:**
+```text
+Matriz Original:
+[ 1.0,  2.0 ]
+[ 3.0,  4.0 ]
+-------------------------------------------------
+Paso 1: Construir la Matriz Aumentada [A | I]
+[ 1.0, 2.0  |  1.0, 0.0 ]
+[ 3.0, 4.0  |  0.0, 1.0 ]
+
+Paso 2: Eliminar el 3.0 de la segunda fila (Fila 1 - 3*Fila 0)
+[ 1.0,  2.0  |  1.0,  0.0 ]
+[ 0.0, -2.0  | -3.0,  1.0 ]
+
+Paso 3: Escalar el pivote de la Fila 1 (Dividir por -2.0)
+[ 1.0, 2.0  |  1.0,  0.0 ]
+[ 0.0, 1.0  |  1.5, -0.5 ]
+
+Paso 4: Eliminar el 2.0 de la primera fila (Fila 0 - 2*Fila 1)
+[ 1.0, 0.0  | -2.0,  1.0 ]
+[ 0.0, 1.0  |  1.5, -0.5 ]
+
+¡Lado izquierdo es la Identidad! El lado derecho es la Inversa matemática:
+[ -2.0,   1.0 ]
+[  1.5,  -0.5 ]
+```
+
+---
+---
+
