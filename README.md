@@ -577,3 +577,37 @@ $0x + 1y = 2 \rightarrow y = 2$
 ---
 ---
 
+## EX11 - Determinant
+
+### 💡 Descripción
+El **determinante** es un valor escalar que resume una matriz cuadrada. Geométricamente, el determinante representa el factor de escala por el cual una transformación lineal altera el área (en 2D) o el volumen (en 3D) del espacio. 
+* Si $Det(A) = 0$, la matriz es **singular**: colapsa el espacio en una dimensión inferior (destruye información) y, por lo tanto, no tiene inversa y su sistema de ecuaciones asociado no tiene una solución única.
+* El signo del determinante indica si la transformación preserva la orientación del espacio (signo positivo) o si la invierte como un reflejo en un espejo (signo negativo).
+
+### 🧠 Lógica
+La forma "escolar" de calcular un determinante (Regla de Sarrus o desarrollo por menores y cofactores) tiene una complejidad factorial desastrosa $O(n!)$, lo que colgaría el ordenador con una matriz de 12x12. 
+
+Para lograr la eficiencia $O(n^3)$ requerida, aplicamos la **Eliminación Gaussiana para triangular la matriz**. 
+Las reglas matemáticas dictan que el determinante de una matriz triangular es simplemente el producto de su diagonal principal. Operar filas sumando/restando múltiplos no altera el determinante, pero **intercambiar dos filas invierte su signo**. Nuestro algoritmo hace la triangulación, cuenta los intercambios de filas para ajustar el signo y multiplica la diagonal final.
+
+### 📊 Ejemplo
+
+**Cálculo de determinante con matriz 2x2 estándar:**
+$$Det = (A_{0,0} \times A_{1,1}) - (A_{0,1} \times A_{1,0})$$
+
+```text
+Matriz:
+[ -7.0,  5.0 ]
+[  4.0,  6.0 ]
+-------------------------------------------------
+Cálculo directo:
+Diagonal Principal = -7.0 * 6.0 = -42.0
+Diagonal Secundaria = 5.0 * 4.0 = 20.0
+
+Determinante = -42.0 - 20.0
+Resultado: -62.0 (El espacio se invierte y aumenta su tamaño x62)
+```
+
+---
+---
+

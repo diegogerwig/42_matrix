@@ -159,5 +159,54 @@ class Matrix:
             
         return Matrix(data)
 
+    def determinant(self) -> float:
+        """
+        Calcula el determinante de una matriz cuadrada mediante triangulación de Gauss.
+        Complejidad temporal: O(n^3)
+        Complejidad espacial: O(n^2) (Copia temporal de la matriz)
+        """
+        if self.shape[0] != self.shape[1]:
+            raise ValueError("El determinante solo está definido para matrices cuadradas.")
+            
+        n = self.shape[0]
+        if n == 0:
+            return 1.0
+        if n == 1:
+            return float(self.data[0][0])
+        if n == 2: 
+            return float(self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0])
+            
+        data = [[float(val) for val in row] for row in self.data]
+        use_fma = hasattr(math, 'fma')
+        det = 1.0
+        
+        for c in range(n):
+            pivot_row = c
+            max_val = abs(data[c][c])
+            for i in range(c + 1, n):
+                if abs(data[i][c]) > max_val:
+                    max_val = abs(data[i][c])
+                    pivot_row = i
+                    
+            if max_val < 1e-7:
+                return 0.0
+                
+            if pivot_row != c:
+                data[c], data[pivot_row] = data[pivot_row], data[c]
+                det *= -1.0
+                
+            pivot_val = data[c][c]
+            det *= pivot_val
+            
+            for i in range(c + 1, n):
+                factor = data[i][c] / pivot_val
+                for j in range(c, n):
+                    if use_fma:
+                        data[i][j] = math.fma(-factor, data[c][j], data[i][j])
+                    else:
+                        data[i][j] -= factor * data[c][j]
+                        
+        return det
+
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])
