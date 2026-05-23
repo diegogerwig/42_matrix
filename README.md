@@ -659,3 +659,42 @@ Paso 4: Eliminar el 2.0 de la primera fila (Fila 0 - 2*Fila 1)
 ---
 ---
 
+## EX13 - Rank
+
+### 💡 Descripción
+El **rango** de una matriz es el número máximo de filas o columnas linealmente independientes que posee. Geométricamente, el rango mide la **verdadera dimensión** del espacio de salida tras aplicar la transformación lineal.
+
+Si tienes una matriz de 3x3 pero su rango es `2`, significa que esa matriz no puede representar un volumen tridimensional real; la transformación aplasta todo el espacio 3D y lo proyecta sobre un plano bidimensional plano. Si su rango es `0`, significa que toda la matriz se colapsa en un único punto inmóvil en el origen `[0, 0]`.
+
+### 🧠 Lógica
+Para calcular el rango de manera eficiente sin caer en complejos análisis combinatorios, aplicamos la **Eliminación de Gauss-Jordan (RREF)** que programamos en el EX10:
+1. El algoritmo opera sobre las filas para anular las dependencias lineales. Si una fila es una copia o combinación lineal de otra, Gauss-Jordan la convertirá completamente en una fila llena de ceros `[0, 0, ... 0]`.
+2. Una vez obtenida la forma escalonada, simplemente recorremos la matriz y contamos cuántas filas sobrevivieron con al menos una entrada distinta de cero (utilizando una tolerancia de seguridad de `1e-7` frente a residuos flotantes).
+
+### 📊 Ejemplo
+
+**Matriz Asimétrica Rectangular (3x4):**
+```text
+Matriz Original:
+[  1.0,  2.0,  0.0,  0.0 ]
+[  2.0,  4.0,  0.0,  0.0 ]
+[ -1.0,  2.0,  1.0,  1.0 ]
+-------------------------------------------------
+Paso 1: Aplicamos Eliminación de Gauss-Jordan.
+Observamos que la Fila 1 es exactamente el doble de la Fila 0 (2x = 2 * 1x). 
+Por tanto, el proceso de eliminación la aniquila por completo:
+
+Matriz en Forma Escalonada:
+[ 1.0,  0.0, -0.5, -0.5 ]  <- Fila No Nula (Sobrevive)
+[ 0.0,  1.0,  0.2,  0.2 ]  <- Fila No Nula (Sobrevive)
+[ 0.0,  0.0,  0.0,  0.0 ]  <- Fila Nula    (Anulada)
+
+Paso 2: Contamos las filas con elementos significativos.
+Filas válidas totales = 2
+
+Resultado Rango: 2 (El sistema tenía 3 ecuaciones, pero solo 2 aportaban información real)
+```
+
+---
+---
+

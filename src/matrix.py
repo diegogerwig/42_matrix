@@ -258,6 +258,22 @@ class Matrix:
         res_data = [[aug[i][j] for j in range(n, 2 * n)] for i in range(n)]
         
         return Matrix(res_data)
+    
+    def rank(self) -> int:
+        """
+        Calcula el rango de la matriz (número de filas linealmente independientes).
+        Se obtiene contando las filas no nulas tras llevarla a su forma escalonada.
+        Complejidad temporal: O(m * n * min(m, n)) debido a Gauss-Jordan.
+        Complejidad espacial: O(m * n) para la matriz escalonada temporal.
+        """
+        rref = self.row_echelon()
+        
+        non_zero_rows = 0
+        for row in rref.data:
+            if any(abs(val) > 1e-7 for val in row):
+                non_zero_rows += 1
+                
+        return non_zero_rows
 
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])
