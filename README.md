@@ -585,9 +585,9 @@ El **determinante** es un valor escalar que resume una matriz cuadrada. Geométr
 * El signo del determinante indica si la transformación preserva la orientación del espacio (signo positivo) o si la invierte como un reflejo en un espejo (signo negativo).
 
 ### 🧠 Lógica
-La forma "escolar" de calcular un determinante (Regla de Sarrus o desarrollo por menores y cofactores) tiene una complejidad factorial desastrosa $O(n!)$, lo que colgaría el ordenador con una matriz de 12x12. 
+La forma de calcular un determinante (Regla de Sarrus o desarrollo por menores y cofactores) tiene una complejidad factorial $O(n!)$, lo que colgaría el ordenador con una matriz de 12x12. 
 
-Para lograr la eficiencia $O(n^3)$ requerida, aplicamos la **Eliminación Gaussiana para triangular la matriz**. 
+Para lograr la eficiencia $O(n^3)$, aplicamos la **Eliminación Gaussiana para triangular la matriz**. 
 Las reglas matemáticas dictan que el determinante de una matriz triangular es simplemente el producto de su diagonal principal. Operar filas sumando/restando múltiplos no altera el determinante, pero **intercambiar dos filas invierte su signo**. Nuestro algoritmo hace la triangulación, cuenta los intercambios de filas para ajustar el signo y multiplica la diagonal final.
 
 ### 📊 Ejemplo

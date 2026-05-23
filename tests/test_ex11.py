@@ -3,7 +3,6 @@ from utils import *
 
 def wrapper_determinant(mat_data):
     res = Matrix(mat_data).determinant()
-    # Redondeamos a 5 decimales para evitar artefactos flotantes como -0.0 o 0.9999999999999
     return round(res, 5)
 
 def run():
