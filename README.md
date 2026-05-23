@@ -63,6 +63,27 @@ Tabla de referencia con el comportamiento algebraico y operacional de las estruc
 [Essence of linear algrebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
 
 ---
+
+## 📑 Índice de Ejercicios
+
+* [EX00 - Add, Subtract and Scale](#ex00---add-subtract-and-scale)
+* [EX01 - Linear Combination](#ex01---linear-combination)
+* [EX02 - Linear Interpolation](#ex02---linear-interpolation)
+* [EX03 - Dot Product](#ex03---dot-product)
+* [EX04 - Norm](#ex04---norm)
+* [EX05 - Cosine](#ex05---cosine)
+* [EX06 - Cross Product](#ex06---cross-product)
+* [EX07 - Linear Map & Matrix Multiplication](#ex07---linear-map--matrix-multiplication)
+* [EX08 - Trace](#ex08---trace)
+* [EX09 - Transpose](#ex09---transpose)
+* [EX10 - Row-Echelon Form](#ex10---row-echelon-form)
+* [EX11 - Determinant](#ex11---determinant)
+* [EX12 - Inverse](#ex12---inverse)
+* [EX13 - Rank](#ex13---rank)
+* [EX14 - Projection Matrix](#ex14---projection-matrix)
+* [EX15 - Complex Vector Spaces)](#ex15---complex-vector-spaces)
+
+---
 ---
 
 ## EX00 - Add, Subtract and Scale
@@ -770,7 +791,7 @@ Matriz de Proyección 4x4 Generada:
 ---
 ---
 
-## EX15 - Complex Vector Spaces (Bonus)
+## EX15 - Complex Vector Spaces
 
 ### 💡 Descripción
 Los espacios vectoriales no están limitados a los números reales ($\mathbb{R}$). En disciplinas muy avanzadas como la **Mecánica Cuántica**, el procesamiento de señales (Transformada de Fourier) o la simulación electromagnética, los espacios vectoriales se construyen sobre el cuerpo de los números complejos ($\mathbb{C}$).
