@@ -667,7 +667,7 @@ El **rango** de una matriz es el número máximo de filas o columnas linealmente
 Si tienes una matriz de 3x3 pero su rango es `2`, significa que esa matriz no puede representar un volumen tridimensional real; la transformación aplasta todo el espacio 3D y lo proyecta sobre un plano bidimensional plano. Si su rango es `0`, significa que toda la matriz se colapsa en un único punto inmóvil en el origen `[0, 0]`.
 
 ### 🧠 Lógica
-Para calcular el rango de manera eficiente sin caer en complejos análisis combinatorios, aplicamos la **Eliminación de Gauss-Jordan (RREF)** que programamos en el EX10:
+Para calcular el rango de manera eficiente aplicamos la **Eliminación de Gauss-Jordan (RREF)** sobre la matriz original:
 1. El algoritmo opera sobre las filas para anular las dependencias lineales. Si una fila es una copia o combinación lineal de otra, Gauss-Jordan la convertirá completamente en una fila llena de ceros `[0, 0, ... 0]`.
 2. Una vez obtenida la forma escalonada, simplemente recorremos la matriz y contamos cuántas filas sobrevivieron con al menos una entrada distinta de cero (utilizando una tolerancia de seguridad de `1e-7` frente a residuos flotantes).
 
@@ -693,6 +693,41 @@ Paso 2: Contamos las filas con elementos significativos.
 Filas válidas totales = 2
 
 Resultado Rango: 2 (El sistema tenía 3 ecuaciones, pero solo 2 aportaban información real)
+```
+
+---
+---
+
+## EX14 - Projection Matrix (Bonus)
+
+### 💡 Descripción
+La **Matriz de Proyección** es el núcleo matemático de cualquier motor de gráficos 3D (como OpenGL, Vulkan, DirectX o motores como Unity y Unreal). 
+
+Las pantallas de nuestros ordenadores son planas (2D), pero los mundos virtuales tienen profundidad (3D). La Matriz de Proyección es una matriz especial de $4 \times 4$ que coge las coordenadas 3D de un objeto y las "aplasta" matemáticamente contra la pantalla, simulando la **perspectiva humana** (las cosas lejanas se ven más pequeñas).
+
+### 🧠 Lógica y Geometría
+Para lograr esta ilusión óptica, la matriz necesita 4 parámetros:
+1. **FOV (Field of View):** El campo de visión. Un ángulo grande (ej: 120°) simula una lente de "ojo de pez", encogiendo todo para que quepa en pantalla.
+2. **Ratio (Aspect Ratio):** La proporción de tu monitor (ej: `16/9` o `1920/1080`). Se usa para que los objetos no se vean achatados si la pantalla es rectangular.
+3. **Near / Far Clipping Planes:** Las distancias mínimas y máximas que la cámara puede "ver". Cualquier objeto más cerca de `near` o más lejos de `far` no se dibujará para ahorrar memoria.
+
+La matriz resultante mapea el espacio de visión (un tronco de pirámide o *frustum*) en un cubo perfecto tridimensional (Normalized Device Coordinates o NDC), cuyos valores van de `-1.0` a `1.0`.
+
+### 📊 Ejemplo de Matriz Resultante
+
+```text
+Configuración:
+FOV = 90° (π/2 radianes)
+Ratio = 16:9
+Near = 0.1
+Far = 1000.0
+-------------------------------------------------
+Matriz de Proyección 4x4 Generada:
+
+[ 0.5625,   0.0,       0.0,       0.0   ]  <- Ajuste horizontal (Ratio)
+[ 0.0,      1.0,       0.0,       0.0   ]  <- Ajuste vertical (FOV)
+[ 0.0,      0.0,      -1.0002,   -0.200 ]  <- Compresión de la profundidad (Z)
+[ 0.0,      0.0,      -1.0,       0.0   ]  <- Guardado de W para perspectiva
 ```
 
 ---
