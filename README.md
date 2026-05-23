@@ -522,14 +522,18 @@ Fila 1: [ 3.0,  1.0,  5.0 ]
 
 #### 🎯 Columna 0: Aislar la primera variable ($x$)
 
-* **Paso 1: Crear el "Pivote"**
+**Paso 1: Crear el "Pivote"**
+
 Dividimos toda la Fila 0 entre `2.0` para que su primer elemento sea exactamente un `1`.
+
 * Operación: `[ 2.0/2, 4.0/2, 10.0/2 ]`
 * Nueva Fila 0: `[ 1.0, 2.0, 5.0 ]` *(Equivale a $1x + 2y = 5$)*
 
 
-* **Paso 2: Eliminar el resto (Hacer el 0)**
+**Paso 2: Eliminar el resto (Hacer el 0)**
+
 Para que el `3.0` de la Fila 1 desaparezca, le restamos 3 veces nuestra nueva Fila 0.
+
 * Operación: `Fila 1 = Fila 1 - (3 * Fila 0)`
 * Nueva Fila 1: `[ 0.0, -5.0, -10.0 ]` *(Equivale a $0x - 5y = -10$)*
 
@@ -537,14 +541,18 @@ Para que el `3.0` de la Fila 1 desaparezca, le restamos 3 veces nuestra nueva Fi
 
 #### 🎯 Columna 1: Aislar la segunda variable ($y$)
 
-* **Paso 3: Crear el nuevo "Pivote"**
+**Paso 3: Crear el nuevo "Pivote"**
+
 Saltamos a la segunda columna. Dividimos toda la Fila 1 entre `-5.0` para que su componente central sea un `1`.
+
 * Operación: `[ 0.0/-5, -5.0/-5, -10.0/-5 ]`
 * Nueva Fila 1: `[ 0.0, 1.0, 2.0 ]` *(Equivale a $1y = 2$)*
 
 
-* **Paso 4: Eliminar el resto (Hacer el 0)**
+**Paso 4: Eliminar el resto (Hacer el 0)**
+
 Para eliminar el `2.0` que aún queda molestando en la Fila 0, le restamos 2 veces nuestra recién creada Fila 1.
+
 * Operación: `Fila 0 = Fila 0 - (2 * Fila 1)`
 * Nueva Fila 0: `[ 1.0, 0.0, 1.0 ]` *(Equivale a $1x = 1$)*
 
