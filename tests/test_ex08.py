@@ -21,7 +21,7 @@ def run():
     ]
 
     def custom_desc(m):
-        return f"Matrix.trace()"
+        return f"Matrix({m}).trace()\n  ↳ Resultado"
 
     run_cases(8, wrapper_trace, cases, custom_desc_func=custom_desc)
 

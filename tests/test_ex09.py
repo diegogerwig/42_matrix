@@ -17,7 +17,7 @@ def run():
     ]
 
     def custom_desc(m):
-        return f"Matrix.transpose()"
+        return f"Matrix({m}).transpose()\n  ↳ Resultado"
 
     run_cases(9, wrapper_transpose, cases, custom_desc_func=custom_desc)
 

@@ -34,10 +34,10 @@ def run():
     ]
 
     print(f"\n{CYAN}--- Pruebas de Multiplicación (Matriz * Vector) ---{NC}")
-    run_cases(7, wrapper_mul_vec, cases_mul_vec, custom_desc_func=lambda m, v: f"Matrix.mul_vec({v})")
+    run_cases(7, wrapper_mul_vec, cases_mul_vec, custom_desc_func=lambda m, v: f"Matrix({m}).mul_vec(Vector({v}))\n  ↳ Resultado")
 
     print(f"\n{CYAN}--- Pruebas de Multiplicación (Matriz * Matriz) ---{NC}")
-    run_cases(7, wrapper_mul_mat, cases_mul_mat, custom_desc_func=lambda m1, m2: f"Matrix.mul_mat()")
+    run_cases(7, wrapper_mul_mat, cases_mul_mat, custom_desc_func=lambda m1, m2: f"Matrix({m1}).mul_mat(Matrix({m2}))\n  ↳ Resultado")
 
 if __name__ == "__main__":
     run()

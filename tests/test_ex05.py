@@ -27,7 +27,7 @@ def run():
     ]
 
     def custom_desc(u, v):
-        return f"angle_cos({u}, {v})"
+        return f"angle_cos(Vector({u}), Vector({v}))\n  ↳ Resultado"
 
     run_cases(5, wrapper_angle_cos, cases, custom_desc_func=custom_desc)
 

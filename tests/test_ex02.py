@@ -47,9 +47,16 @@ def run():
     ]
 
     def custom_desc(u, v, t):
-        u_str = str(u) if not isinstance(u, list) else f"{type(Vector(u) if not isinstance(u[0], list) else Matrix(u)).__name__}"
-        v_str = str(v) if not isinstance(v, list) else f"{type(Vector(v) if not isinstance(v[0], list) else Matrix(v)).__name__}"
-        return f"linear_interpolation({u_str}, {v_str}, {t})"
+        # Función auxiliar para formatear visualmente la entrada
+        def format_arg(arg):
+            if isinstance(arg, list):
+                if len(arg) > 0 and isinstance(arg[0], list):
+                    return f"Matrix({arg})"
+                else:
+                    return f"Vector({arg})"
+            return str(arg)
+            
+        return f"lerp({format_arg(u)}, {format_arg(v)}, {t})\n  ↳ Resultado"
 
     run_cases(2, wrapper_lerp, cases, custom_desc_func=custom_desc)
 

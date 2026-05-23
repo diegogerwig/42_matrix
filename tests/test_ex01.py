@@ -24,7 +24,7 @@ def run():
     ]
 
     def custom_desc(vectors_data, coefs):
-        return f"linear_combination({len(vectors_data)} vectors)"
+        return f"linear_combination({vectors_data}, {coefs})\n  ↳ Resultado"
 
     run_cases(1, wrapper_linear_combination, cases, custom_desc_func=custom_desc)
 

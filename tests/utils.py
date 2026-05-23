@@ -41,8 +41,20 @@ def print_result(description, result, expected):
 
 def print_error(description, error_type, error_msg):
     status = f"[{CYAN}{error_type}{NC}]"
-
-    print(f" {YELLOW}•{NC} {description:<{PAD_LENGTH}} {status}")
+    lines = description.split('\n')
+    
+    for i, line in enumerate(lines):
+        if i == len(lines) - 1:
+            if len(lines) == 1:
+                print(f" {YELLOW}•{NC} {line:<{PAD_LENGTH}} {status}")
+            else:
+                print(f"{line:<{PAD_LENGTH + 3}} {status}")
+        else:
+            if i == 0:
+                print(f" {YELLOW}•{NC} {line}")
+            else:
+                print(f"{line}")
+                
     print(f"   {BLUE}└── {error_msg}{NC}")
 
 
@@ -70,17 +82,22 @@ def run_cases(ex_num: int, funcion_a_testear, casos: list, custom_desc_func=None
 
     for inputs, expected in casos:
         args = inputs if isinstance(inputs, tuple) else (inputs,)
-
-        if custom_desc_func:
-            desc = custom_desc_func(*args)
-        else:
-            desc = f"{funcion_a_testear.__name__}{args}"
+        desc = custom_desc_func(*args) if custom_desc_func else f"{funcion_a_testear.__name__}{args}"
 
         try:
             res = funcion_a_testear(*args)
 
             if expected is None:
-                print(f" {YELLOW}•{NC} {desc:<70} [{RED}FAIL{NC}]")
+                lines = desc.split('\n')
+                for i, line in enumerate(lines):
+                    if i == len(lines) - 1:
+                        if len(lines) == 1:
+                            print(f" {YELLOW}•{NC} {line:<{PAD_LENGTH}} [{RED}FAIL{NC}]")
+                        else:
+                            print(f"{line:<{PAD_LENGTH + 3}} [{RED}FAIL{NC}]")
+                    else:
+                        print(f" {YELLOW}•{NC} {line}" if i == 0 else f"{line}")
+                        
                 print(f"    {RED}└── Se esperaba un error, pero devolvió: {res}{NC}")
                 all_ok = False
             else:

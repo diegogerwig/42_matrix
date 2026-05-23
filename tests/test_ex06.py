@@ -25,7 +25,7 @@ def run():
     ]
 
     def custom_desc(u, v):
-        return f"cross_product({u}, {v})"
+        return f"cross_product(Vector({u}), Vector({v}))\n  ↳ Resultado"
 
     run_cases(6, wrapper_cross, cases, custom_desc_func=custom_desc)
 

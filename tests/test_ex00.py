@@ -105,15 +105,18 @@ def run():
     ]
 
     print(f"\n{CYAN}--- Pruebas de Vectores ---{NC}")
-    run_cases(0, wrapper_vec_add, vec_add_cases, custom_desc_func=lambda u, v: f"Vector.add({u}, {v})")
-    run_cases(0, wrapper_vec_sub, vec_sub_cases, custom_desc_func=lambda u, v: f"Vector.sub({u}, {v})")
-    run_cases(0, wrapper_vec_scl, vec_scl_cases, custom_desc_func=lambda u, s: f"Vector.scl({u}, {s})")
+    run_cases(0, wrapper_vec_add, vec_add_cases, custom_desc_func=lambda u, v: f"Vector({u}).add({v})\n  ↳ Resultado")
+    run_cases(0, wrapper_vec_sub, vec_sub_cases, custom_desc_func=lambda u, v: f"Vector({u}).sub({v})\n  ↳ Resultado")
+    run_cases(0, wrapper_vec_scl, vec_scl_cases, custom_desc_func=lambda u, s: f"Vector({u}).scl({s})\n  ↳ Resultado")
 
     print(f"\n{CYAN}--- Pruebas de Matrices ---{NC}")
-    run_cases(0, wrapper_mat_add, mat_add_cases, custom_desc_func=lambda u, v: f"Matrix.add()")
-    run_cases(0, wrapper_mat_sub, mat_sub_cases, custom_desc_func=lambda u, v: f"Matrix.sub()")
-    run_cases(0, wrapper_mat_scl, mat_scl_cases, custom_desc_func=lambda u, s: f"Matrix.scl({s})")
+    run_cases(0, wrapper_mat_add, mat_add_cases, custom_desc_func=lambda u, v: f"Matrix({u}).add({v})\n  ↳ Resultado")
+    run_cases(0, wrapper_mat_sub, mat_sub_cases, custom_desc_func=lambda u, v: f"Matrix({u}).sub({v})\n  ↳ Resultado")
+    run_cases(0, wrapper_mat_scl, mat_scl_cases, custom_desc_func=lambda u, s: f"Matrix({u}).scl({s})\n  ↳ Resultado")
 
+
+if __name__ == "__main__":
+    run()
 
 if __name__ == "__main__":
     run()

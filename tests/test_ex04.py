@@ -48,13 +48,13 @@ def run():
     ]
 
     print(f"\n{CYAN}--- Pruebas de Norma 1 (Manhattan) ---{NC}")
-    run_cases(4, wrapper_norm_1, norm_cases_1, custom_desc_func=lambda u: f"norm_1({u})")
+    run_cases(4, wrapper_norm_1, norm_cases_1, custom_desc_func=lambda u: f"norm_1(Vector({u}))\n  ↳ Resultado")
 
     print(f"\n{CYAN}--- Pruebas de Norma 2 (Euclidiana) ---{NC}")
-    run_cases(4, wrapper_norm, norm_cases_2, custom_desc_func=lambda u: f"norm({u})")
+    run_cases(4, wrapper_norm, norm_cases_2, custom_desc_func=lambda u: f"norm(Vector({u}))\n  ↳ Resultado")
 
     print(f"\n{CYAN}--- Pruebas de Norma Suprema (Infinity) ---{NC}")
-    run_cases(4, wrapper_norm_inf, norm_cases_inf, custom_desc_func=lambda u: f"norm_inf({u})")
+    run_cases(4, wrapper_norm_inf, norm_cases_inf, custom_desc_func=lambda u: f"norm_inf(Vector({u}))\n  ↳ Resultado")
 
 
 if __name__ == "__main__":

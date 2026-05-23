@@ -28,7 +28,7 @@ def run():
     ]
 
     def custom_desc(u, v):
-        return f"dot({u}, {v})"
+        return f"dot(Vector({u}), Vector({v}))\n  ↳ Resultado"
 
     run_cases(3, wrapper_dot, cases, custom_desc_func=custom_desc)
 
