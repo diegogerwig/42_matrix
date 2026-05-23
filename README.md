@@ -507,74 +507,10 @@ Al utilizar el FMA (`math.fma`) en la fase de eliminación, minimizamos el ruido
 
 ### 📊 Ejemplo
 
-**Resolviendo un sistema de ecuaciones matricial**
-
-**Sistema de Ecuaciones:**
-
-$$2x + 4y = 10$$
-
-$$3x + y = 5$$
-
-**Matriz Original (2x3):**
-```text
-Fila 0: [ 2.0,  4.0, 10.0 ]
-Fila 1: [ 3.0,  1.0,  5.0 ]
-
-🎯 Columna 0: Aislar la primera variable ($x$)
-
-Paso 1: Crear el "Pivote"
-Dividimos toda la Fila 0 entre 2.0 para que su primer elemento sea exactamente un 1.
-Operación: [ 2.0/2, 4.0/2, 10.0/2 ]Nueva Fila 0: [ 1.0, 2.0, 5.0 ] (Equivale a $1x + 2y = 5$)
-
-Paso 2: Eliminar el resto (Hacer el 0)
-Para que el 3.0 de la Fila 1 desaparezca, le restamos 3 veces nuestra nueva Fila 0.
-Operación: Fila 1 = Fila 1 - (3 * Fila 0)Nueva Fila 1: [ 0.0, -5.0, -10.0 ] (Equivale a $0x - 5y = -10$)
-
-🎯 Columna 1: Aislar la segunda variable ($y$)
-
-Paso 3: Crear el nuevo "Pivote"
-Saltamos a la segunda columna. Dividimos toda la Fila 1 entre -5.0 para que su componente central sea un 1.
-Operación: [ 0.0/-5, -5.0/-5, -10.0/-5 ]Nueva Fila 1: [ 0.0, 1.0, 2.0 ] (Equivale a $1y = 2$)
-
-Paso 4: Eliminar el resto (Hacer el 0)
-Para eliminar el 2.0 que aún queda molestando en la Fila 0, le restamos 2 veces nuestra recién creada Fila 1.
-Operación: Fila 0 = Fila 0 - (2 * Fila 1)Nueva Fila 0: [ 1.0, 0.0, 1.0 ] (Equivale a $1x = 1$)
-
-🏁 Resultado Final (Matriz Escalonada Reducida)
-La parte izquierda de la matriz se ha convertido en una Matriz Identidad perfecta, aislando los valores en la última columna.
-[ 1.0, 0.0, 1.0 ]
-[ 0.0, 1.0, 2.0 ]
-```
-
-Al leer el resultado de forma lineal, la matriz nos da la solución directa del sistema de ecuaciones:
-
-$1x + 0y = 1 \rightarrow \mathbf{x = 1}$
-
-$0x + 1y = 2 \rightarrow \mathbf{y = 2}$
-
----
----
-
-
-## EX10 - Row-Echelon Form
-
-### 💡 Descripción
-La forma escalonada reducida por filas (RREF) es el resultado de aplicar el **Algoritmo de Eliminación de Gauss-Jordan**. El objetivo geométrico y algebraico de este algoritmo es simplificar una matriz lo máximo posible operando con sus filas para revelar la "esencia" o estructura más pura del espacio vectorial que representa.
-
-Es la herramienta definitiva del álgebra lineal para resolver sistemas de ecuaciones, encontrar la inversa de una matriz y descubrir cuántas dimensiones reales tiene un sistema (rango).
-
-### 🧠 Lógica
-Para llevar una matriz a su forma RREF, seguimos estos pasos de manera iterativa por cada columna:
-1. **Buscar el Pivote:** Buscamos el valor absoluto más grande en la columna actual. Intercambiamos esa fila con la superior para asegurar la máxima estabilidad numérica y evitar divisiones por cero.
-2. **Escalar:** Dividimos toda esa fila por el valor del pivote para que el coeficiente principal (el primer número no nulo) sea un `1` exacto.
-3. **Eliminar:** Restamos múltiplos de esa fila al resto de filas de la matriz (tanto las de abajo como las de arriba) para que todas las demás entradas de esa columna se conviertan en `0`.
-
-Al utilizar el FMA (`math.fma`) en la fase de eliminación, minimizamos el ruido de punto flotante que suele arrastrarse en operaciones de $O(n^3)$.
-
-### 📊 Ejemplo: Resolviendo un sistema de ecuaciones matricial
-
 **Sistema de Ecuaciones Original:**
+
 $$2x + 4y = 10$$
+
 $$3x + y = 5$$
 
 **Matriz Equivalente (2x3):**
@@ -626,8 +562,9 @@ La parte izquierda de la matriz se ha convertido en una Matriz Identidad perfect
 
 Al leer el resultado de forma lineal, la matriz nos da la solución directa del sistema de ecuaciones:
 
-* $1x + 0y = 1 \rightarrow x = 1$
-* $0x + 1y = 2 \rightarrow y = 2$
+$1x + 0y = 1 \rightarrow x = 1$
+
+$0x + 1y = 2 \rightarrow y = 2$
 
 ---
 ---
