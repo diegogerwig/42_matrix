@@ -96,5 +96,21 @@ class Matrix:
             
         return res
 
+    def transpose(self) -> 'Matrix':
+        """
+        Calcula y devuelve la transpuesta de la matriz (intercambia filas por columnas).
+        Complejidad temporal: O(m * n) donde m y n son las dimensiones de la matriz.
+        Complejidad espacial: O(m * n) para almacenar la nueva matriz.
+        """
+        m, n = self.shape
+        
+        res_data = [[0.0] * m for _ in range(n)]
+        
+        for i in range(m):
+            for j in range(n):
+                res_data[j][i] = float(self.data[i][j])
+                
+        return Matrix(res_data)
+
     def __str__(self):
         return "\n".join(["[" + ", ".join(f"{x}" for x in row) + "]" for row in self.data])

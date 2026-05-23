@@ -450,3 +450,42 @@ Traza: 2.0 + 3.0 + 4.0
 
 Resultado: 9.0
 ```
+
+---
+---
+
+## EX09 - Transpose
+
+### 💡 Descripción
+La **Transposición** es una operación que devuelve una nueva matriz reflejada sobre su diagonal principal. Geométricamente, el efecto es el intercambio de las filas por las columnas. 
+
+Esta operación no altera la información de la matriz, simplemente reorganiza su estructura. Es increíblemente útil en matemáticas gráficas y machine learning, ya que a menudo necesitamos transponer vectores columna en vectores fila (o viceversa) para cumplir con las reglas de compatibilidad dimensional de la multiplicación de matrices (que programamos en el EX07).
+
+### 🧠 Lógica
+Matemáticamente, la matriz transpuesta $A^T$ de una matriz $A$ de dimensiones $m \times n$ se define elemento a elemento como:
+
+$$A^T_{j,i} = A_{i,j}$$
+
+El tamaño de la matriz resultante pasa a ser estrictamente de $n \times m$. Esto se implementa iterando la matriz original y asignando cada lectura directamente a las coordenadas inversas de una nueva matriz previamente dimensionada.
+
+### 📊 Ejemplo
+
+**Transposición de una Matriz Rectangular**
+```text
+Matriz Original (3x2):
+[ 1.0,  2.0 ]
+[ 3.0,  4.0 ]
+[ 5.0,  6.0 ]
+-------------------------------------------------
+Desarrollo (Fila -> Columna):
+Fila 0 [1, 2] se convierte en Columna 0
+Fila 1 [3, 4] se convierte en Columna 1
+Fila 2 [5, 6] se convierte en Columna 2
+
+Resultado Matriz Transpuesta (2x3):
+[ 1.0,  3.0,  5.0 ]
+[ 2.0,  4.0,  6.0 ]
+```
+
+---
+---
