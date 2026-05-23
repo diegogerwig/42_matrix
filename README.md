@@ -509,9 +509,9 @@ Al utilizar el FMA (`math.fma`) en la fase de eliminación, minimizamos el ruido
 
 **Sistema de Ecuaciones Original:**
 
-$$2x + 4y = 10$$
+$2x + 4y = 10$
 
-$$3x + y = 5$$
+$3x + y = 5$
 
 **Matriz Equivalente (2x3):**
 ```text
