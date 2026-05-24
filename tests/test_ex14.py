@@ -195,7 +195,7 @@ def run():
     try:
         respuesta = input().strip().lower()
         if respuesta in ['y', 'yes']:
-            print(f"\n{CYAN}Iniciando visor con configuración estándar (FOV 60°, Ratio 1.0, Near 0.1, Far 100.0)...{NC}")
+            print(f"\n{CYAN}Iniciando visor con configuración estándar (FOV 20°, Ratio 1.0, Near 0.1, Far 100.0)...{NC}")
             # Importamos el visor que creamos antes
             from interactive_viewer import run_interactive_viewer
             run_interactive_viewer()

@@ -2,16 +2,15 @@ import os
 import sys
 import math
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
+from matplotlib.widgets import Slider, Button
 
-# Aseguramos que Python encuentre tus clases de la carpeta src
+# Aseguramos que Python encuentre tus clases
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from vector import Vector
 from matrix import Matrix
 from projection import projection
 
 def load_model():
-    """Lee el archivo .obj y extrae vértices y caras."""
     current_dir = os.path.dirname(os.path.abspath(__file__))
     obj_path = os.path.join(current_dir, '..', 'display_linux', 'matrix_display', 'assets', 'model.obj')
     
@@ -34,39 +33,49 @@ def load_model():
 def run_interactive_viewer():
     vertices, faces = load_model()
 
-    # Ampliamos la ventana para que quepan más controles
-    fig, ax = plt.subplots(figsize=(10, 9), facecolor='#1e1e1e')
-    plt.subplots_adjust(bottom=0.45) # Hacemos más hueco abajo
+    fig, ax = plt.subplots(figsize=(11, 9), facecolor='#1e1e1e')
+    # Ajustamos márgenes para dejar espacio a los controles y al texto de la matriz
+    plt.subplots_adjust(bottom=0.45, left=0.25)
     ax.set_facecolor('#1e1e1e')
 
-    # Configuración de los ejes para los Sliders
     axcolor = '#333333'
     ax_fov   = plt.axes([0.20, 0.35, 0.65, 0.03], facecolor=axcolor)
     ax_ratio = plt.axes([0.20, 0.30, 0.65, 0.03], facecolor=axcolor)
     ax_near  = plt.axes([0.20, 0.25, 0.65, 0.03], facecolor=axcolor)
     ax_far   = plt.axes([0.20, 0.20, 0.65, 0.03], facecolor=axcolor)
-    
-    # ¡NUEVOS CONTROLES DE ROTACIÓN!
     ax_rot_y = plt.axes([0.20, 0.15, 0.65, 0.03], facecolor=axcolor)
     ax_rot_x = plt.axes([0.20, 0.10, 0.65, 0.03], facecolor=axcolor)
 
-    # Creamos los Sliders
-    s_fov   = Slider(ax_fov, 'FOV (Grados)', 10.0, 150.0, valinit=60.0, color='#00ffcc')
+    # FOV inicial cambiado a 20.0
+    s_fov   = Slider(ax_fov, 'FOV (Grados)', 10.0, 150.0, valinit=20.0, color='#00ffcc')
     s_ratio = Slider(ax_ratio, 'Ratio', 0.5, 3.0, valinit=1.0, color='#00ffcc')
     s_near  = Slider(ax_near, 'Near', 0.1, 10.0, valinit=0.1, color='#ff3366')
     s_far   = Slider(ax_far, 'Far', 10.0, 100.0, valinit=100.0, color='#ff3366')
-    
-    # Inicializamos la rotación a 0 para que empiece viéndose de frente
     s_rot_y = Slider(ax_rot_y, 'Rotación Y', -180.0, 180.0, valinit=0.0, color='#aa33ff')
     s_rot_x = Slider(ax_rot_x, 'Rotación X', -180.0, 180.0, valinit=0.0, color='#aa33ff')
 
-    # Textos en blanco para modo oscuro
+    # ¡NUEVO! Botón de Reset dedicado
+    ax_reset = plt.axes([0.80, 0.02, 0.1, 0.04])
+    btn_reset = Button(ax_reset, 'Reset', color=axcolor, hovercolor='0.975')
+    btn_reset.label.set_color('white')
+
+    def reset(event):
+        s_fov.reset()
+        s_ratio.reset()
+        s_near.reset()
+        s_far.reset()
+        s_rot_y.reset()
+        s_rot_x.reset()
+    btn_reset.on_clicked(reset)
+
     for slider in [s_fov, s_ratio, s_near, s_far, s_rot_y, s_rot_x]:
         slider.label.set_color('white')
         slider.valtext.set_color('white')
 
+    # ¡NUEVO! Zona de texto para imprimir la matriz 4x4 en pantalla
+    matrix_text = fig.text(0.02, 0.95, '', color='#00ffcc', family='monospace', fontsize=11, verticalalignment='top')
+
     def update(val):
-        """Se ejecuta dinámicamente cada vez que tocas cualquier slider"""
         ax.clear()
         ax.set_xlim([-1.5, 1.5])
         ax.set_ylim([-1.5, 1.5])
@@ -74,14 +83,18 @@ def run_interactive_viewer():
 
         fov_rad = s_fov.val * math.pi / 180.0
         
-        # 1. Calculamos la matriz de proyección (Cámara)
         try:
             proj_matrix = projection(fov_rad, s_ratio.val, s_near.val, s_far.val)
         except:
             fig.canvas.draw_idle()
             return
 
-        # 2. Leemos la rotación solicitada en los sliders
+        # ¡Actualizamos la matriz en pantalla en tiempo real!
+        mat_str = "Projection Matrix:\n"
+        for row in proj_matrix.data:
+            mat_str += "[ " + ", ".join([f"{v:7.3f}" for v in row]) + " ]\n"
+        matrix_text.set_text(mat_str)
+
         angle_y = s_rot_y.val * math.pi / 180.0
         angle_x = s_rot_x.val * math.pi / 180.0
         cos_y, sin_y = math.cos(angle_y), math.sin(angle_y)
@@ -90,27 +103,21 @@ def run_interactive_viewer():
         Z_OFFSET = 4.0 
         projected_vertices = []
         
-        # 3. Aplicamos Transformaciones
         for v in vertices:
-            # A) Rotación Y (Horizontal)
             x_rot = v[0] * cos_y + v[2] * sin_y
             z_rot = -v[0] * sin_y + v[2] * cos_y
             
-            # B) Rotación X (Vertical)
             y_rot = v[1] * cos_x - z_rot * sin_x
             z_final = v[1] * sin_x + z_rot * cos_x
             
-            # C) Traslación y conversión a vector homogéneo
             v_copy = [x_rot, y_rot, z_final - Z_OFFSET, 1.0]
             
-            # D) Multiplicamos por la matriz de PROYECCIÓN
             v_vec = Vector(v_copy)
             try:
                 proj_v = proj_matrix.mul_vec(v_vec).data
             except:
                 proj_v = [sum(proj_matrix.data[i][j] * v_copy[j] for j in range(4)) for i in range(4)]
 
-            # E) Perspectiva
             if proj_v[3] != 0:
                 proj_v[0] /= proj_v[3]
                 proj_v[1] /= proj_v[3]
@@ -118,7 +125,6 @@ def run_interactive_viewer():
 
             projected_vertices.append(proj_v)
 
-        # 4. Dibujar líneas con Clipping
         for face in faces:
             clipped = False
             for idx in face:
@@ -135,7 +141,6 @@ def run_interactive_viewer():
 
         fig.canvas.draw_idle()
 
-    # Escuchadores de eventos para los sliders
     s_fov.on_changed(update)
     s_ratio.on_changed(update)
     s_near.on_changed(update)
@@ -143,10 +148,9 @@ def run_interactive_viewer():
     s_rot_y.on_changed(update)
     s_rot_x.on_changed(update)
 
-    # Primer dibujado inicial (de frente)
     update(None)
     
-    plt.suptitle("Matrix 42 - Interactive Projection & Rotation Viewer", color='white', y=0.96)
+    plt.suptitle("Matrix 42 - Interactive Projection Viewer", color='white', y=0.97)
     plt.show()
 
 if __name__ == "__main__":
