@@ -34,7 +34,6 @@ def run_interactive_viewer():
     vertices, faces = load_model()
 
     fig, ax = plt.subplots(figsize=(11, 9), facecolor='#1e1e1e')
-    # Ajustamos márgenes para dejar espacio a los controles y al texto de la matriz
     plt.subplots_adjust(bottom=0.45, left=0.25)
     ax.set_facecolor('#1e1e1e')
 
@@ -46,7 +45,6 @@ def run_interactive_viewer():
     ax_rot_y = plt.axes([0.20, 0.15, 0.65, 0.03], facecolor=axcolor)
     ax_rot_x = plt.axes([0.20, 0.10, 0.65, 0.03], facecolor=axcolor)
 
-    # FOV inicial cambiado a 20.0
     s_fov   = Slider(ax_fov, 'FOV (Grados)', 10.0, 150.0, valinit=20.0, color='#00ffcc')
     s_ratio = Slider(ax_ratio, 'Ratio', 0.5, 3.0, valinit=1.0, color='#00ffcc')
     s_near  = Slider(ax_near, 'Near', 0.1, 10.0, valinit=0.1, color='#ff3366')
@@ -54,10 +52,11 @@ def run_interactive_viewer():
     s_rot_y = Slider(ax_rot_y, 'Rotación Y', -180.0, 180.0, valinit=0.0, color='#aa33ff')
     s_rot_x = Slider(ax_rot_x, 'Rotación X', -180.0, 180.0, valinit=0.0, color='#aa33ff')
 
-    # ¡NUEVO! Botón de Reset dedicado
-    ax_reset = plt.axes([0.80, 0.02, 0.1, 0.04])
-    btn_reset = Button(ax_reset, 'Reset', color=axcolor, hovercolor='0.975')
+    # ¡NUEVO!: Botón con color llamativo (Cyan eléctrico para destacar)
+    ax_reset = plt.axes([0.80, 0.02, 0.1, 0.05])
+    btn_reset = Button(ax_reset, 'RESET', color='#00aaff', hovercolor='#00ffcc')
     btn_reset.label.set_color('white')
+    btn_reset.label.set_weight('bold')
 
     def reset(event):
         s_fov.reset()
@@ -72,24 +71,18 @@ def run_interactive_viewer():
         slider.label.set_color('white')
         slider.valtext.set_color('white')
 
-    # ¡NUEVO! Zona de texto para imprimir la matriz 4x4 en pantalla
-    matrix_text = fig.text(0.02, 0.95, '', color='#00ffcc', family='monospace', fontsize=11, verticalalignment='top')
+    matrix_text = fig.text(0.02, 0.95, '', color='#00ffcc', family='monospace', fontsize=10, verticalalignment='top')
 
     def update(val):
         ax.clear()
+        ax.set_aspect('equal') # ¡Mantiene la proporción perfecta!
         ax.set_xlim([-1.5, 1.5])
         ax.set_ylim([-1.5, 1.5])
         ax.axis('off')
 
         fov_rad = s_fov.val * math.pi / 180.0
-        
-        try:
-            proj_matrix = projection(fov_rad, s_ratio.val, s_near.val, s_far.val)
-        except:
-            fig.canvas.draw_idle()
-            return
+        proj_matrix = projection(fov_rad, s_ratio.val, s_near.val, s_far.val)
 
-        # ¡Actualizamos la matriz en pantalla en tiempo real!
         mat_str = "Projection Matrix:\n"
         for row in proj_matrix.data:
             mat_str += "[ " + ", ".join([f"{v:7.3f}" for v in row]) + " ]\n"
@@ -106,23 +99,18 @@ def run_interactive_viewer():
         for v in vertices:
             x_rot = v[0] * cos_y + v[2] * sin_y
             z_rot = -v[0] * sin_y + v[2] * cos_y
-            
             y_rot = v[1] * cos_x - z_rot * sin_x
             z_final = v[1] * sin_x + z_rot * cos_x
             
             v_copy = [x_rot, y_rot, z_final - Z_OFFSET, 1.0]
             
             v_vec = Vector(v_copy)
-            try:
-                proj_v = proj_matrix.mul_vec(v_vec).data
-            except:
-                proj_v = [sum(proj_matrix.data[i][j] * v_copy[j] for j in range(4)) for i in range(4)]
+            proj_v = proj_matrix.mul_vec(v_vec).data
 
             if proj_v[3] != 0:
                 proj_v[0] /= proj_v[3]
                 proj_v[1] /= proj_v[3]
                 proj_v[2] /= proj_v[3]
-
             projected_vertices.append(proj_v)
 
         for face in faces:
@@ -131,7 +119,6 @@ def run_interactive_viewer():
                 if projected_vertices[idx][2] < -1.0 or projected_vertices[idx][2] > 1.0:
                     clipped = True
                     break
-            
             if not clipped:
                 x_pts = [projected_vertices[idx][0] for idx in face]
                 y_pts = [projected_vertices[idx][1] for idx in face]
@@ -149,7 +136,6 @@ def run_interactive_viewer():
     s_rot_x.on_changed(update)
 
     update(None)
-    
     plt.suptitle("Matrix 42 - Interactive Projection Viewer", color='white', y=0.97)
     plt.show()
 
