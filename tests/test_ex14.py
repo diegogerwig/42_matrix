@@ -190,11 +190,11 @@ def run():
     # =========================================================================
     # 🚀 INTEGRACIÓN DEL VISOR INTERACTIVO
     # =========================================================================
-    print(f"{YELLOW}¿Deseas abrir el visor interactivo 3D para probar la matriz en tiempo real? (s/N): {NC}", end="", flush=True)
+    print(f"{YELLOW}¿Deseas abrir el visor interactivo 3D para probar la matriz en tiempo real? (y/N): {NC}", end="", flush=True)
     
     try:
         respuesta = input().strip().lower()
-        if respuesta in ['s', 'si', 'y', 'yes']:
+        if respuesta in ['y', 'yes']:
             print(f"\n{CYAN}Iniciando visor con configuración estándar (FOV 60°, Ratio 1.0, Near 0.1, Far 100.0)...{NC}")
             # Importamos el visor que creamos antes
             from interactive_viewer import run_interactive_viewer
