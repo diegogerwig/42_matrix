@@ -161,16 +161,13 @@ def run():
         ((70.0 * math.pi / 180.0, 2.0, 1.0, 100.0), 
          [[0.71407, 0.0, 0.0, 0.0], [0.0, 1.42815, 0.0, 0.0], [0.0, 0.0, -1.0202, -2.0202], [0.0, 0.0, -1.0, 0.0]]),
 
-        # 5. Modificación de planos Near/Far (Objeto visible dentro del Frustum)
+        # 5. Modificación de planos Near/Far
         ((70.0 * math.pi / 180.0, 1.0, 2.0, 50.0), 
          [[1.42815, 0.0, 0.0, 0.0], [0.0, 1.42815, 0.0, 0.0], [0.0, 0.0, -1.08333, -4.16667], [0.0, 0.0, -1.0, 0.0]]),
-
+         
         # 6. Vista "Macro" Extrema (Zoom Máximo). FOV 20°, Ratio 1.0, near 0.1, far 100.0
         ((20.0 * math.pi / 180.0, 1.0, 0.1, 100.0), 
-         [[5.67128, 0.0, 0.0, 0.0], 
-          [0.0, 5.67128, 0.0, 0.0], 
-          [0.0, 0.0, -1.002, -0.2002], 
-          [0.0, 0.0, -1.0, 0.0]]),      
+         [[5.67128, 0.0, 0.0, 0.0], [0.0, 5.67128, 0.0, 0.0], [0.0, 0.0, -1.002, -0.2002], [0.0, 0.0, -1.0, 0.0]]),
 
         # Casos de Error Controlado
         ((math.pi / 2.0, 1.0, 10.0, 10.0), None),
@@ -183,12 +180,29 @@ def run():
 
     run_cases(14, wrapper_projection, cases, custom_desc_func=custom_desc)
 
-    # Mensaje de confirmación final
+    # Mensaje de confirmación final de archivos
     current_dir = os.path.dirname(os.path.abspath(__file__))
     out_dir = os.path.abspath(os.path.join(current_dir, '..', 'display_output'))
     print(f"\n{CYAN}📂 Resultados exportados con éxito en:{NC}")
     print(f"{GREEN}   ↳ {out_dir}{NC}")
     print(f"   (Cada configuración cuenta con su archivo '.png' y su matriz '.proj' correspondiente)\n")
+
+    # =========================================================================
+    # 🚀 INTEGRACIÓN DEL VISOR INTERACTIVO
+    # =========================================================================
+    print(f"{YELLOW}¿Deseas abrir el visor interactivo 3D para probar la matriz en tiempo real? (s/N): {NC}", end="", flush=True)
+    
+    try:
+        respuesta = input().strip().lower()
+        if respuesta in ['s', 'si', 'y', 'yes']:
+            print(f"\n{CYAN}Iniciando visor con configuración estándar (FOV 60°, Ratio 1.0, Near 0.1, Far 100.0)...{NC}")
+            # Importamos el visor que creamos antes
+            from interactive_viewer import run_interactive_viewer
+            run_interactive_viewer()
+        else:
+            print(f"{YELLOW}Saltando visor interactivo.{NC}")
+    except Exception as e:
+        print(f"\n{RED}No se pudo iniciar el visor interactivo: {e}{NC}")
 
 if __name__ == "__main__":
     run()
