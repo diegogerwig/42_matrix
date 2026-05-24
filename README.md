@@ -64,7 +64,7 @@ Tabla de referencia con el comportamiento algebraico y operacional de las estruc
 
 ---
 
-## 📑 Índice
+## 📑 Índice de Ejercicios
 
 * [EX00 - Add, Subtract and Scale](#ex00---add-subtract-and-scale)
 * [EX01 - Linear Combination](#ex01---linear-combination)

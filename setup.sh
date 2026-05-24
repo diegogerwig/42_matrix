@@ -152,14 +152,6 @@ if [[ "$MODE" == "venv" ]]; then
 else
     export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 
-    # ==========================================
-    # 🔧 REPARACIÓN AUTOMÁTICA DE PERMISOS
-    # ==========================================
-    VISOR_BIN="$(pwd)/display_linux/matrix_display/display"
-    if [ -f "$VISOR_BIN" ]; then
-        chmod +x "$VISOR_BIN" 2>/dev/null || true
-    fi
-
     if [ -d "tests" ]; then
         if [[ -n "$SPECIFIC_TEST" ]]; then
             FORMATTED_NUM=$(printf "%02d" "$SPECIFIC_TEST")

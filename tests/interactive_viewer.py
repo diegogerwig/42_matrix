@@ -1,10 +1,18 @@
 import os
 import sys
 import math
+import platform
+
+def running_in_wsl():
+    return "microsoft" in platform.uname().release.lower()
+
+if not running_in_wsl():
+    import matplotlib
+    matplotlib.use("TkAgg")
+
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
 
-# Aseguramos que Python encuentre tus clases
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from vector import Vector
 from matrix import Matrix
@@ -31,6 +39,10 @@ def load_model():
     return vertices, faces
 
 def run_interactive_viewer():
+    if running_in_wsl():
+        print("⚠️  Visor 3D deshabilitado en WSL: no hay backend gráfico disponible.")
+        return
+
     vertices, faces = load_model()
 
     fig, ax = plt.subplots(figsize=(11, 9), facecolor='#1e1e1e')
@@ -140,4 +152,7 @@ def run_interactive_viewer():
     plt.show()
 
 if __name__ == "__main__":
-    run_interactive_viewer()
+    if running_in_wsl():
+        print("⚠️ Visor 3D deshabilitado en WSL: no hay backend gráfico disponible.")
+    else:
+        run_interactive_viewer()
