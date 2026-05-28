@@ -171,7 +171,8 @@ elif [[ "$MODE" == "test" ]]; then
             FORMATTED_NUM=$(printf "%02d" "$SPECIFIC_TEST")
             TEST_FILES=$(ls tests/test_ex${FORMATTED_NUM}*.py 2>/dev/null)
         else
-            TEST_FILES=$(ls tests/test_*.py | sort)
+            # ¡Filtramos explícitamente test_complexity.py para que no salga al principio!
+            TEST_FILES=$(ls tests/test_*.py 2>/dev/null | grep -E -v "test_complexity\.py" | sort)
         fi
 
         for file in $TEST_FILES; do
@@ -205,7 +206,6 @@ elif [[ "$MODE" == "test" ]]; then
                 if [[ -z "$user_input" ]]; then
                     break
                 elif [[ "$user_input" == "python" || "$user_input" == "python3" ]]; then
-                    # Si escribes python, aseguramos que el PYTHONPATH esté bien inyectado
                     PYTHONPATH="$(pwd)/src" python3
                 else
                     eval "$user_input"
@@ -230,5 +230,24 @@ elif [[ "$MODE" == "test" ]]; then
         echo -e "${B_GREEN}✅ RESULTADO GLOBAL: TODO OK${NC}\n"
     else
         echo -e "${B_RED}❌ RESULTADO GLOBAL: ALGUNOS TESTS FALLARON${NC}\n"
+    fi
+
+    # ==========================================
+    # 6. DISPARADOR DE COMPLEJIDAD POST-RESUMEN
+    # ==========================================
+    if [[ -z "$SPECIFIC_TEST" ]]; then
+        echo -e "${B_CYAN}────────────────────────────────────────────────────────────────${NC}"
+        echo -ne "${B_YELLOW}🧠 ¿Deseas ejecutar el Test de Complejidad (Time & Space) ahora? (y/N): ${NC}"
+        read -r run_comp
+        if [[ "$run_comp" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            echo -e "\n${B_CYAN}⚙️  Iniciando Test de Complejidad Completo...${NC}"
+            if [ -f "tests/test_complexity.py" ]; then
+                python3 tests/test_complexity.py
+            else
+                echo -e "${B_RED}❌ Error: No se encontró el script 'tests/test_complexity.py'.${NC}"
+            fi
+        else
+            echo -e "${B_YELLOW}Omitiendo Test de Complejidad.${NC}\n"
+        fi
     fi
 fi
