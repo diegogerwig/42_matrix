@@ -19,13 +19,14 @@ if [ "$#" -gt 2 ]; then
     echo -e "  bash setup.sh test x    -> Ejecuta SOLO el test x (admite del 0 al 15)."
     echo -e "  bash setup.sh venv      -> Crea/usa venv y lo deja activado en la terminal."
     echo -e "  bash setup.sh clean     -> Borra el entorno virtual y limpia las cachés."
+    echo -e "  bash setup.sh complexity-> Ejecuta el Test de Complejidad (Time & Space)."
     exit 1
 fi
 
 MODE=${1:-test}
 SPECIFIC_TEST=$2
 
-if [[ "$MODE" != "test" && "$MODE" != "venv" && "$MODE" != "clean" ]]; then
+if [[ "$MODE" != "test" && "$MODE" != "venv" && "$MODE" != "clean" && "$MODE" != "memory" && "$MODE" != "complexity" ]]; then
     echo -e "${B_RED}❌ Argumento inválido: $MODE${NC}"
     echo -e "${B_YELLOW}Uso correcto:${NC}"
     echo -e "  bash setup.sh           -> [Default] Crea/usa venv y ejecuta TODOS los tests."
@@ -33,6 +34,7 @@ if [[ "$MODE" != "test" && "$MODE" != "venv" && "$MODE" != "clean" ]]; then
     echo -e "  bash setup.sh test x    -> Ejecuta SOLO el test x (admite del 0 al 15)."
     echo -e "  bash setup.sh venv      -> Crea/usa venv y lo deja activado en la terminal."
     echo -e "  bash setup.sh clean     -> Borra el entorno virtual y limpia las cachés."
+    echo -e "  bash setup.sh complexity-> Ejecuta el Test de Complejidad (Time & Space)."
     exit 1
 fi
 
@@ -93,7 +95,7 @@ fi
 
 echo -e "\n${B_CYAN}📂 Ruta del entorno: ${NC}$VENV_PATH"
 echo -e "${B_CYAN}⚙️  Modo seleccionado: ${NC}$MODE"
-if [[ -n "$SPECIFIC_TEST" ]]; then
+if [[ -n "$SPECIFIC_TEST" && "$MODE" == "test" ]]; then
     echo -e "${B_CYAN}🎯 Filtro de test: ${NC}Ejercicio $(printf "%02d" "$SPECIFIC_TEST")"
 fi
 
@@ -134,6 +136,8 @@ else
     echo -e "${B_CYAN}ℹ️  No se encontró requirements.txt${NC}"
 fi
 
+export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+
 # ==========================================
 # 4. RAMIFICACIÓN SEGÚN EL MODO ELEGIDO
 # ==========================================
@@ -149,9 +153,11 @@ if [[ "$MODE" == "venv" ]]; then
     echo "rm -f '$TMP_RC'" >> "$TMP_RC"
     exec bash --rcfile "$TMP_RC"
 
-else
-    export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+elif [[ "$MODE" == "complexity" ]]; then
+    echo -e "\n${B_CYAN}⚙️  Iniciando Test de Complejidad Completo...${NC}"
+    python3 tests/test_complexity.py
 
+elif [[ "$MODE" == "test" ]]; then
     # ==========================================
     # 🔧 REPARACIÓN AUTOMÁTICA DE PERMISOS
     # ==========================================
@@ -208,9 +214,9 @@ else
         done
     fi
 
-# ==========================================
-# 5. RESUMEN FINAL
-# ==========================================
+    # ==========================================
+    # 5. RESUMEN FINAL DE LOS TESTS
+    # ==========================================
     echo -e "\n${B_BLUE}╔═══════════════════════════════════╗${NC}"
     echo -e "${B_BLUE}║          RESUMEN FINAL            ║${NC}"
     echo -e "${B_BLUE}╚═══════════════════════════════════╝${NC}\n"
