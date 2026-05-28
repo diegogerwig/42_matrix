@@ -155,9 +155,6 @@ def analyze_complexity():
         print(f"\n{GREEN}↳ Memory Complexity: {mem_o}{NC}")
         print(f"{GREEN}↳ Time Complexity:   {time_o}{NC}\n")
 
-        # =====================================================================
-        # DIBUJADO DE GRÁFICA LOG-LOG
-        # =====================================================================
         fig, ax1 = plt.subplots(figsize=(10, 6), facecolor='#1e1e1e')
         ax1.set_facecolor('#2d2d2d')
         
@@ -172,12 +169,11 @@ def analyze_complexity():
         ax2.set_ylabel('Execution time (ms)', color='#ff3366', fontsize=11)
         ax2.tick_params(axis='y', labelcolor='#ff3366')
 
-        # Escala Logarítmica para ver las curvas exponenciales claramente
         ax1.set_xscale('log', base=2)
         ax1.set_yscale('log', base=10)
         ax2.set_yscale('log', base=10)
 
-        plt.title(f'Complejidad Asintótica - {func_name}', color='white', pad=20, fontsize=14)
+        plt.title(f'Complexity graph - {func_name}', color='white', pad=20, fontsize=14)
         ax1.grid(True, linestyle='--', alpha=0.2, color='#ffffff')
 
         lines1, labels1 = ax1.get_legend_handles_labels()
@@ -186,7 +182,6 @@ def analyze_complexity():
         for text in legend.get_texts():
             text.set_color("white")
 
-        # Guardamos la imagen
         out_path = os.path.join(out_dir, f"complexity_{func_name.lower()}.png")
         plt.tight_layout()
         plt.savefig(out_path, facecolor=fig.get_facecolor(), dpi=150)
